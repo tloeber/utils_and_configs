@@ -36,6 +36,16 @@ alias tn="tmux new -s"
 alias ta="tmux attach -t"
 
 
+## Git
+## ===
+alias gs="git status"
+alias gc="git commit"
+alias gcm="git commit -m"
+alias gl="git log"
+alias glo="git log --oneline"
+alias glg="git log --graph --oneline --decorate --all"
+
+
 ## other
 ## =====
 
