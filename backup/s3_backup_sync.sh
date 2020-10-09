@@ -6,8 +6,8 @@ BACKUP_ORIGINS=("/c/Users/tloeb/desktop" \
   "/c/Users/tloeb/AppData/Roaming/Mozilla/Firefox/Profiles/r8wk84di.default-release/bookmarkbackups" \
   "/f")
 # Keep name of S3 bucket out of version control (just in case)
-DESTINATION_BUCKET_PATH=$(cat /f/projects/utilities/backup/config/backup_destination.txt)
-AWS_PROFILE=b
+DESTINATION_BUCKET_PATH=$(cat /f/projects/utils_and_configs/backup/config/backup_destination.txt)
+AWS_PROFILE="b"
 LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 
 {
@@ -19,9 +19,9 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 	# Double quotes around array ensure we can have spaces in paths (if
 	# we also put double quotes around each path in array.)
 	for dir in "${BACKUP_ORIGINS[@]}"; do
-		# Add path of original file to S3, but truncate first character ('/').
+		# Add directory of original file to S3 as prefix.
 		# Using AWS managed KMS key, so we don't have to provide a key ID.
-		aws s3 sync "$dir" "s3://${DESTINATION_BUCKET_PATH}/${dir:1}" \
+		aws s3 sync "$dir" "s3://${DESTINATION_BUCKET_PATH}${dir}" \
 			--storage-class=STANDARD_IA \
 			--profile=$AWS_PROFILE \
 			--exclude "*\$RECYCLE.BIN*" \
@@ -32,7 +32,28 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 			--exclude "*IDriveLocal*" \
 			--sse aws:kms \
 			--delete \
-			--dryrun 
+			# --dryrun 
+			
+	done
+
+	# New line 
+	echo ""
+
+
+	# Individual files
+	# ----------------
+
+	for path in "${BACKUP_FILES[@]}"; do
+		# Get directory name from path, and exclude all other files
+		dir=$(dirname "$path")
+		aws s3 sync "$dir" "s3://${DESTINATION_BUCKET_PATH}${path}" \
+			--storage-class=STANDARD_IA \
+			--profile=$AWS_PROFILE \
+			--exclude "*" \
+			--include "$path" \
+			--sse aws:kms \
+			--delete \
+			# --dryrun 
 			
 	done
 
