@@ -47,6 +47,15 @@ alias glo="git log --oneline"
 alias glg="git log --graph --oneline --decorate --all"
 alias gd="git diff"
 alias ga="git add"
+alias gb="git branch"
+alias gr="git remote"
+alias gpush="git push"
+alias gpull="git pull"
+alias gm="git move"
+# Add *one or more* file and commit
+function gac {
+  git add "$@" && git commit
+}
 
 
 ## other
