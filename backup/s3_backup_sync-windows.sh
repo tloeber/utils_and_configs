@@ -5,6 +5,9 @@ BACKUP_ORIGINS=("/c/Users/tloeb/desktop" \
   "/c/Users/tloeb/Standard Notes Backups" \
   "/c/Users/tloeb/AppData/Roaming/Mozilla/Firefox/Profiles/r8wk84di.default-release/bookmarkbackups" \
   "/f")
+# Individual files to backup
+BACKUP_FILES=("/c/Users/tloeb/AppData/Local/Google/Chrome/User Data/Default/Bookmarks")
+
 # Keep name of S3 bucket out of version control (just in case)
 DESTINATION_BUCKET_PATH=$(cat /f/projects/utils_and_configs/backup/config/backup_destination.txt)
 AWS_PROFILE="b"
