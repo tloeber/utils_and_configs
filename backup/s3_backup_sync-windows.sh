@@ -5,6 +5,8 @@ BACKUP_ORIGINS=("/c/Users/tloeb/desktop" \
   "/c/Users/tloeb/Standard Notes Backups" \
   "/c/Users/tloeb/AppData/Roaming/Mozilla/Firefox/Profiles/r8wk84di.default-release/bookmarkbackups" \
   "/f")
+BACKUP_ORIGINS_DEEP_ARCHIVE=("/r")
+
 # Individual files to backup
 BACKUP_FILES=("/c/Users/tloeb/AppData/Local/Google/Chrome/User Data/Default/Bookmarks")
 
@@ -18,12 +20,10 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 	# -----------
 
 	# echo "$(date) - ${BASH_SOURCE[0]}" 	# Linux only
-	echo $(date)
-	# Double quotes around array ensure we can have spaces in paths (if
-	# we also put double quotes around each path in array.)
+	echo "Started at $(date)"
+	echo "Backing up whole directories to Standard IA:"
 	for dir in "${BACKUP_ORIGINS[@]}"; do
-		# Add directory of original file to S3 as prefix.
-		# Using AWS managed KMS key, so we don't have to provide a key ID.
+		# It's not possible to specify KMS encryption for Glacier. It's Automatically encrypted using AES-256.
 		aws s3 sync "$dir" "s3://${DESTINATION_BUCKET_PATH}${dir}" \
 			--storage-class=STANDARD_IA \
 			--profile=$AWS_PROFILE \
@@ -33,8 +33,33 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 			--exclude "*.joblib.*" \
 			--exclude "*.ipynb_checkpoints*" \
 			--exclude "*IDriveLocal*" \
-			--sse aws:kms \
 			--delete \
+			# --dryrun 
+			
+	done
+
+	# New line 
+	echo ""
+
+
+    # Directories to Glacier DA
+	# -------------------------
+
+	echo "Backing up whole directories to Glacier Deep Archive:"
+	for dir in "${BACKUP_ORIGINS_DEEP_ARCHIVE[@]}"; do
+		# Add directory of original file to S3 as prefix.
+		# Using AWS managed KMS key, so we don't have to provide a key ID.
+		aws s3 sync "$dir" "s3://${DESTINATION_BUCKET_PATH}${dir}" \
+			--storage-class=DEEP_ARCHIVE \
+			--profile=$AWS_PROFILE \
+			--exclude "*$RECYCLE.BIN*" \
+			# --exclude "*Pictures/*.jpg" \
+			# --exclude "*Pictures/*.JPG" \
+			# --exclude "*Pictures/*.PNG" \
+			# --exclude "*Pictures/*.ini" \
+			# --exclude "*Pictures/*.exe" \
+			--sse aws:kms \
+			--delete 
 			# --dryrun 
 			
 	done
@@ -46,6 +71,7 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 	# Individual files
 	# ----------------
 
+	echo "Backing up individual files to Standard IA:"
 	for path in "${BACKUP_FILES[@]}"; do
 		# Get directory name from path, and exclude all other files
 		dir=$(dirname "$path")
@@ -60,9 +86,13 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 			
 	done
 
+	echo "Finished at $(date)"
 	# New line before next log entry
 	echo ""
 	
 } > $LOG_PATH 2>&1
+
+# Open log file with VS Code
+code $LOG_PATH
 
 $SHELL	
