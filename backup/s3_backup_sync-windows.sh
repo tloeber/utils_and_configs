@@ -1,18 +1,18 @@
 #!/bin/bash
 
 # Whole directories to back up
-BACKUP_ORIGINS=("/c/Users/tloeb/desktop" \
+backup_origins=("/c/Users/tloeb/desktop" \
   "/c/Users/tloeb/AppData/Roaming/Mozilla/Firefox/Profiles/r8wk84di.default-release/bookmarkbackups" \
   "/f")
-BACKUP_ORIGINS_DEEP_ARCHIVE=("/r")
+backup_origins_deep_archives=("/r")
 
 # Individual files to backup
-BACKUP_FILES=("/c/Users/tloeb/AppData/Local/Google/Chrome/User Data/Default/Bookmarks")
+backup_files=("/c/Users/tloeb/AppData/Local/Google/Chrome/User Data/Default/Bookmarks")
 
+aws_profile="b"
+log_path="/c/logs/backups/s3_backup_sync.log"
 # Keep name of S3 bucket out of version control (just in case)
-DESTINATION_BUCKET_PATH=$(cat /f/projects/utils_and_configs/backup/config/backup_destination.txt)
-AWS_PROFILE="b"
-LOG_PATH="/c/logs/backups/s3_backup_sync.log"
+destination_bucket_path=$(cat /f/projects/utils_and_configs/backup/config/backup_destination.txt)
 
 {
 	# Directories
@@ -21,11 +21,11 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 	# echo "$(date) - ${BASH_SOURCE[0]}" 	# Linux only
 	echo "Started at $(date)"
 	echo "Backing up whole directories to Standard IA:"
-	for dir in "${BACKUP_ORIGINS[@]}"; do
+	for dir in "${backup_origins[@]}"; do
 		# It's not possible to specify KMS encryption for Glacier. It's automatically encrypted using AES-256.
-		aws s3 sync "$dir" "s3://${DESTINATION_BUCKET_PATH}${dir}" \
+		aws s3 sync "$dir" "s3://${destination_bucket_path}${dir}" \
 			--storage-class=STANDARD_IA \
-			--profile=$AWS_PROFILE \
+			--profile=$aws_profile \
 			--exclude "*$RECYCLE.BIN*" \
 			--exclude "*.git*" \
 			--exclude "*.Rproj*" \
@@ -45,15 +45,15 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 	# -------------------------
 
 	echo "Backing up whole directories to Glacier Deep Archive:"
-	for dir in "${BACKUP_ORIGINS_DEEP_ARCHIVE[@]}"; do
+	for dir in "${backup_origins_deep_archives[@]}"; do
 		# Add directory of original file to S3 as prefix.
 		# Using AWS managed KMS key, so we don't have to provide a key ID.
-		aws s3 sync "$dir" "s3://${DESTINATION_BUCKET_PATH}${dir}" \
+		aws s3 sync "$dir" "s3://${destination_bucket_path}${dir}" \
 			--storage-class=DEEP_ARCHIVE \
-			--profile=$AWS_PROFILE \
+			--profile=$aws_profile \
 			--exclude "*$RECYCLE.BIN*" \
 			--delete 
-			# --dryrun control S			
+			# --dryrun 			
 	done
 
 	# New line 
@@ -64,12 +64,12 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 	# ----------------
 
 	echo "Backing up individual files to Standard IA:"
-	for path in "${BACKUP_FILES[@]}"; do
+	for path in "${backup_files[@]}"; do
 		# Get directory name from path, and exclude all other files
 		dir=$(dirname "$path")
-		aws s3 sync "$dir" "s3://${DESTINATION_BUCKET_PATH}${path}" \
+		aws s3 sync "$dir" "s3://${destination_bucket_path}${path}" \
 			--storage-class=STANDARD_IA \
-			--profile=$AWS_PROFILE \
+			--profile=$aws_profile \
 			--exclude "*" \
 			--include "$path" \
 			--sse aws:kms \
@@ -82,9 +82,9 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 	echo ""
 	echo ""
 	
-} > $LOG_PATH 2>&1
+} > $log_path 2>&1
 
 # Open log file with VS Code
-code $LOG_PATH
+code $log_path
 
 $SHELL	
