@@ -2,7 +2,6 @@
 
 # Whole directories to back up
 BACKUP_ORIGINS=("/c/Users/tloeb/desktop" \
-  "/c/Users/tloeb/Standard Notes Backups" \
   "/c/Users/tloeb/AppData/Roaming/Mozilla/Firefox/Profiles/r8wk84di.default-release/bookmarkbackups" \
   "/f")
 BACKUP_ORIGINS_DEEP_ARCHIVE=("/r")
@@ -23,19 +22,19 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 	echo "Started at $(date)"
 	echo "Backing up whole directories to Standard IA:"
 	for dir in "${BACKUP_ORIGINS[@]}"; do
-		# It's not possible to specify KMS encryption for Glacier. It's Automatically encrypted using AES-256.
+		# It's not possible to specify KMS encryption for Glacier. It's automatically encrypted using AES-256.
 		aws s3 sync "$dir" "s3://${DESTINATION_BUCKET_PATH}${dir}" \
 			--storage-class=STANDARD_IA \
 			--profile=$AWS_PROFILE \
-			--exclude "*\$RECYCLE.BIN*" \
+			--exclude "*$RECYCLE.BIN*" \
 			--exclude "*.git*" \
 			--exclude "*.Rproj*" \
 			--exclude "*.joblib.*" \
 			--exclude "*.ipynb_checkpoints*" \
 			--exclude "*IDriveLocal*" \
+			--sse aws:kms \
 			--delete \
-			# --dryrun 
-			
+			# --dryrun 			
 	done
 
 	# New line 
@@ -53,15 +52,8 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 			--storage-class=DEEP_ARCHIVE \
 			--profile=$AWS_PROFILE \
 			--exclude "*$RECYCLE.BIN*" \
-			# --exclude "*Pictures/*.jpg" \
-			# --exclude "*Pictures/*.JPG" \
-			# --exclude "*Pictures/*.PNG" \
-			# --exclude "*Pictures/*.ini" \
-			# --exclude "*Pictures/*.exe" \
-			--sse aws:kms \
 			--delete 
-			# --dryrun 
-			
+			# --dryrun control S			
 	done
 
 	# New line 
@@ -82,12 +74,12 @@ LOG_PATH="/c/logs/backups/s3_backup_sync.log"
 			--include "$path" \
 			--sse aws:kms \
 			--delete \
-			# --dryrun 
-			
+			# --dryrun 		
 	done
 
 	echo "Finished at $(date)"
-	# New line before next log entry
+	#  2 new lines before next log entry
+	echo ""
 	echo ""
 	
 } > $LOG_PATH 2>&1
