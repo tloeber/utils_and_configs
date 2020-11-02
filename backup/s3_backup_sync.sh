@@ -1,14 +1,13 @@
 #!/bin/bash
 
+# Explicitly specify user's home path, since Anacron runs it as root
+home_path="/home/thomas"
 # Whole directories to back up
-backup_origins=("/etc/" \
-  "~/")
+backup_origins=("/etc/"  "${home_path}/")
 aws_profile="b"
 log_path="/var/log/my_programs/backups/s3_backup_sync.log"
 # Keep name of S3 bucket out of version control (just in case)
 destination_bucket_path=$(cat config/backup_destination.txt)
-# Explicitly specify user's home path, since Anacron runs it as root
-home_path="/home/thomas"
 
 {
 	# Directories
