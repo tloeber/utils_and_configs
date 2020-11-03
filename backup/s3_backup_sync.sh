@@ -3,7 +3,7 @@
 # Explicitly specify user's home path, since Anacron runs it as root
 home_path="/home/thomas"
 # Whole directories to back up
-backup_origins=("/etc/"  "${home_path}/")
+backup_origins=("/etc/"  "${home_path}/" "/var/spool/*cron/")
 aws_profile="b"
 log_path="/var/log/my_programs/backups/s3_backup_sync.log"
 # Keep name of S3 bucket out of version control (just in case)
@@ -21,6 +21,7 @@ destination_bucket_path=$(cat config/backup_destination.txt)
 			--storage-class=STANDARD_IA \
 			--profile=$aws_profile \
 			--exclude "${home_path}/.aws*" \
+                        --exclude "${home_path}/.cache*" \
 			--exclude "${home_path}/.gnupg*" \
 			--exclude "${home_path}/.password-store*" \
 			--exclude "${home_path}/.pki*" \
