@@ -5,10 +5,8 @@ backup_origins=("/c/Users/tloeb/desktop" \
   "/c/Users/tloeb/AppData/Roaming/Mozilla/Firefox/Profiles/r8wk84di.default-release/bookmarkbackups" \
   "/f")
 backup_origins_deep_archives=("/r")
-
 # Individual files to backup
 backup_files=("/c/Users/tloeb/AppData/Local/Google/Chrome/User Data/Default/Bookmarks")
-
 aws_profile="b"
 log_path="/c/logs/backups/s3_backup_sync.log"
 # Keep name of S3 bucket out of version control (just in case)
@@ -17,12 +15,15 @@ destination_bucket_path=$(cat /f/projects/utils_and_configs/backup/config/backup
 {
 	# Directories
 	# -----------
-
-	# echo "$(date) - ${BASH_SOURCE[0]}" 	# Linux only
+    
+	echo ""
+	echo "========================================="
 	echo "Started at $(date)"
+
 	echo "Backing up whole directories to Standard IA:"
 	for dir in "${backup_origins[@]}"; do
-		# It's not possible to specify KMS encryption for Glacier. It's automatically encrypted using AES-256.
+		# Add parent directory of original file to S3 as prefix.
+		# Using AWS managed KMS key, so we don't have to provide a key ID.
 		aws s3 sync "$dir" "s3://${destination_bucket_path}${dir}" \
 			--storage-class=STANDARD_IA \
 			--profile=$aws_profile \
@@ -46,8 +47,7 @@ destination_bucket_path=$(cat /f/projects/utils_and_configs/backup/config/backup
 
 	echo "Backing up whole directories to Glacier Deep Archive:"
 	for dir in "${backup_origins_deep_archives[@]}"; do
-		# Add directory of original file to S3 as prefix.
-		# Using AWS managed KMS key, so we don't have to provide a key ID.
+		# It's not possible to specify KMS encryption for Glacier. It's automatically encrypted using AES-256.
 		aws s3 sync "$dir" "s3://${destination_bucket_path}${dir}" \
 			--storage-class=DEEP_ARCHIVE \
 			--profile=$aws_profile \
