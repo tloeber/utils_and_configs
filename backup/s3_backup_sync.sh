@@ -10,6 +10,7 @@ log_path="/var/log/my_programs/backups/s3_backup_sync.log"
 aws_profile="b"
 
 {
+	
 	echo ""
 	echo "======================================================================="
 	echo ""
