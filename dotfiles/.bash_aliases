@@ -73,7 +73,8 @@ function mc {
 ## ================
 
 function validate_json {
-   python -mjson.tool "$1" > /dev/null
+   (python -mjson.tool "$1" > /dev/null  && echo "json is valid.") || \
+   echo "json is NOT valid."
 }
 
 function validate_json2 {
