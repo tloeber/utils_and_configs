@@ -18,6 +18,7 @@ destination_bucket_path=$(cat /f/projects/utils_and_configs/backup/config/backup
     
 	echo ""
 	echo "========================================="
+	echo ""
 	echo "Started at $(date)"
 
 	echo "Backing up whole directories to Standard IA:"
@@ -37,9 +38,6 @@ destination_bucket_path=$(cat /f/projects/utils_and_configs/backup/config/backup
 			--delete \
 			# --dryrun 			
 	done
-
-	# New line 
-	echo ""
 
 
     # Directories to Glacier DA
