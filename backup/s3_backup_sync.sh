@@ -4,11 +4,12 @@
 destination_bucket_path=$(cat config/backup_destination.txt)
 # Explicitly specify user's home path, since Anacron runs script as root
 home_path="/home/thomas"
-log_path="/var/log/my_programs/backups/s3_backup_sync.log"
-temp_local_backups_path="/var/tmp/ubuntu_other/"
+log_path="/var/log/my_programs/backup/s3_backup_sync.log"
+temp_local_backups_path="/var/tmp/ubuntu_other"
 # Directories to back up
-backup_origins=("/etc/" "~/" "${temp_local_backup_path}/")
+backup_origins=("/etc/" "$home_path" "$temp_local_backups_path")
 aws_profile="b"
+
 
 {
 	
@@ -16,15 +17,16 @@ aws_profile="b"
 	echo "======================================================================="
 	echo ""
 	echo "started at $(date) - ${BASH_SOURCE[0]}" 
-	echo "Backing up whole directories to Standard IA:"
+	#echo "Backing up whole directories to Standard IA:"
 
 	## Generate temporary local backups
+ 	#echo "Generating temporary local backups"
 	# Installed packages
 	dpkg --get-selections > "${temp_local_backups_path}/packages.bak"
 	# Partition table
-	fdisk -l > fdisk.bak
+	fdisk -l > "${temp_local_backups_path}/fdisk.bak"
 	# MBR
-	dd if=/dev/sda of=MBR.bak bs=512 count=1
+	dd if=/dev/sda of=${temp_local_backups_path}/MBR.bak bs=512 count=1
 
 
 	for dir in "${backup_origins[@]}"; do
@@ -35,10 +37,12 @@ aws_profile="b"
 			--storage-class=STANDARD_IA \
 			--profile=$aws_profile \
 			--exclude "${home_path}/.aws*" \
+			--exclude "${home_path}/.bash_history*" \
 			--exclude "${home_path}/.gnupg*" \
 			--exclude "${home_path}/.password-store*" \
 			--exclude "${home_path}/.pki*" \
 			--exclude "${home_path}/.ssh*" \
+			--exclude "${home_path}/.tmux_history*" \
 			--exclude "${home_path}/Dropbox*" \
 			--exclude "${home_path}/anaconda3*" \
 			--exclude "${home_path}/aws*" \
@@ -47,6 +51,7 @@ aws_profile="b"
 			--exclude "*.Rproj*" \
 			--exclude "*.joblib.*" \
 			--exclude "*.ipynb_checkpoints*" \
+			--exclude "*.swp" \
 			--sse aws:kms \
 			--delete \
 			--dryrun 			
@@ -56,5 +61,3 @@ aws_profile="b"
 } > $log_path 2>&1
 
 less $log_path
-
-$SHELL	
