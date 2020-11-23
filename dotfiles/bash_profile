@@ -1,0 +1,4 @@
+source ~/.profile
+
+# So that .bashrc is also read by a NON-LOGIN shell
+source ~/.bashrc
