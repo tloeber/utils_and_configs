@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+## Added by myself, TL
+## ===================
+*.swp
+old/*
