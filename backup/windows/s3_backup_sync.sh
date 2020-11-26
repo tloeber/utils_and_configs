@@ -82,7 +82,4 @@ destination_bucket_path=$(cat /f/projects/utils_and_configs/backup/config/backup
 	
 } > $log_path 2>&1
 
-# Open log file with VS Code
-code $log_path
-
 $SHELL	
