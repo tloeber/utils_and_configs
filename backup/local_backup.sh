@@ -1,13 +1,13 @@
 ## User defined variables
 # Since multiple directories need to be backed up, put symlinks to them here
-backup_origin="/home/thomas/directories_to_backup/"
+backup_origin="/home/thomas/directories_to_rsync/"
 backup_dir="/media/thomas/orico_black/hp_laptop"
 # Logging
-log_dir="/var/log/my_programs/backup"
-log_path="${log_dir}/local.log"
-log_path_prev="${log_dir}/local_prev.log"
-error_path="${log_dir}/local_errors.log"
-error_path_prev="${log_dir}/local_errors_prev.log"
+log_dir="/var/log/my_programs/backup/local"
+log_path="${log_dir}/stdout.log"
+log_path_prev="${log_dir}/stdout_prev.log"
+error_path="${log_dir}/stderr.log"
+error_path_prev="${log_dir}/stderr_prev.log"
 
 ## These generally should not have to be modified by user
 backup_path="${backup_dir}/$(date '+%Y-%m-%d_%H:%M:%S')"
@@ -22,7 +22,7 @@ cat $error_path >> $error_path_prev \
 
 {
     # Create directory for newest backup
-    mkdir backup_path
+    mkdir $backup_path
 
     # -KL follows symlinks
     rsync -avKL --delete \
