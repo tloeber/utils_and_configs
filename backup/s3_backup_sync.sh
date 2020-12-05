@@ -4,20 +4,34 @@
 destination_bucket_path=$(cat /home/thomas/projects/utils_and_configs/backup/config/backup_destination.txt)
 # Explicitly specify user's home path, since Anacron runs script as root
 home_path="/home/thomas"
-log_path="/var/log/my_programs/backup/aws/aws.log"
 temp_local_backups_path="/var/tmp/ubuntu_other"
 # Directories to back up
 backup_origins=("/etc" "$home_path" "$temp_local_backups_path")
 aws_profile="b"
 
+# Logging
+log_dir="/var/log/my_programs/backup/aws"
+log_path="${log_dir}/stdout.log"
+log_path_prev="${log_dir}/stdout_prev.log"
+error_path="${log_dir}/stderr.log"
+error_path_prev="${log_dir}/stderr_prev.log"
+
+# Add logs of last run to file containing all previous logs
 {
-	
-	echo ""
+	cat $log_path 
 	echo "======================================================================="
 	echo ""
-	echo "started at $(date) - ${BASH_SOURCE[0]}" 
-	#echo "Backing up whole directories to Standard IA:"
+} >> $log_path_prev || echo "No existing log_path file found."
 
+{
+	cat $error_path 
+	echo "======================================================================="
+	echo ""
+} >> $error_path_prev || echo "No existing error_path file found."
+
+{
+	echo "started at $(date) - ${BASH_SOURCE[0]}" 
+	
 	## Generate temporary local backups
  	#echo "Generating temporary local backups"
 	# Installed packages
@@ -64,4 +78,4 @@ aws_profile="b"
 	done
 
 	echo "Finished at $(date)"
-} > $log_path 2>&1
+} > $log_path 2> $error_path   
