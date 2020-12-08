@@ -13,12 +13,18 @@ error_path_prev="${log_dir}/stderr_prev.log"
 backup_path="${backup_dir}/$(date '+%Y-%m-%d_%H:%M:%S')"
 link_to_latest_backup="${backup_dir}/latest"
 
-# Add log of last run to file containing all previous logs
-cat $log_path >> $log_path_prev \
-    || echo "No existing log_path file found."
+# Add logs of last run to file containing all previous logs
+{
+	cat $log_path 
+	echo "======================================================================="
+	echo ""
+} >> $log_path_prev || echo "No existing log_path file found."
 
-cat $error_path >> $error_path_prev \
-    || echo "No existing error_path file found."
+{
+	cat $error_path 
+	echo "======================================================================="
+	echo ""
+} >> $error_path_prev || echo "No existing error_path file found."
 
 {
     # Create directory for newest backup
