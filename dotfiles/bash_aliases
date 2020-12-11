@@ -2,7 +2,7 @@
 ## =======
 
 # Container
-alias dc="docker container"
+#alias dc="docker container"
 #alias dcls="docker container ls"
 #alias dcrm="docker container rm"
 alias dcr="docker container run"
@@ -17,8 +17,15 @@ alias dn="docker network"
 alias di="docker image"
 alias dib="docker image build"
 
-#Volume 
+# Volume 
 alias dv="docker volume"
+
+# Compose
+alias dc="docker-compose"
+alias dcu="docker-compose up"
+alias dcr="docker-compose restart"
+alias dcs="docker-compose down"
+
 
 # dcr()
 # Usage: dls '-it alpine sh'
