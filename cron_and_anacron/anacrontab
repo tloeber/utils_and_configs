@@ -12,4 +12,4 @@ LOGNAME=root
 7	10	cron.weekly	run-parts --report /etc/cron.weekly
 @monthly	15	cron.monthly	run-parts --report /etc/cron.monthly
 1       15      update_daily     /bin/bash /home/thomas/projects/utils_and_configs/update/auto_update.sh > /var/log/my_programs/update/anacron.log 2>&1
-1       15      backup_daily     /bin/bash /home/thomas/projects/utils_and_configs/backup/s3_backup_sync.sh > /var/log/my_programs/backup/anacron.log 2>&1
+1       15      backup_daily     /bin/bash /home/thomas/projects/utils_and_configs/backup/aws_backup.sh > /var/log/my_programs/backup/anacron_aws.log 2>&1
