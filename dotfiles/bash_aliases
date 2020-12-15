@@ -1,14 +1,14 @@
 ## Docker
 ## =======
 
-# Container
-#alias dc="docker container"
-#alias dcls="docker container ls"
-#alias dcrm="docker container rm"
-alias dcr="docker container run"
-alias dcs="docker container start"
-alias dca="docker container attach"
-alias dce="docker container exec"
+# Container ("_" added since "docker-compose" is more important command)
+alias dc_="docker container"
+alias dc_ls="docker container ls"
+alias dc_rm="docker container rm"
+alias dc_r="docker container run"
+alias dc_s="docker container start"
+alias dc_a="docker container attach"
+alias dc_e="docker container exec"
 
 # Network
 alias dn="docker network"
