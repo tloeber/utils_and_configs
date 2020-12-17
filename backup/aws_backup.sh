@@ -29,9 +29,11 @@ error_path_prev="${log_dir}/stderr_prev.log"
 	echo ""
 } >> $error_path_prev || echo "No existing error_path file found."
 
-{
-	echo "started at $(date) - ${BASH_SOURCE[0]}" 
-	
+
+# Write start time and filename to BOTH log and error file
+echo "started at $(date) - ${BASH_SOURCE[0]}" | tee $log_path $error_path
+
+{	
 	## Generate temporary local backups
  	#echo "Generating temporary local backups"
 	# Installed packages
