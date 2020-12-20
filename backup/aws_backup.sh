@@ -12,8 +12,6 @@ aws_profile="b"
 log_dir="/var/log/my_programs/backup/aws"
 log_path="${log_dir}/stdout.log"
 log_path_prev="${log_dir}/stdout_prev.log"
-error_path="${log_dir}/stderr.log"
-error_path_prev="${log_dir}/stderr_prev.log"
 
 # Add logs of last run to file containing all previous logs
 {
@@ -22,15 +20,6 @@ error_path_prev="${log_dir}/stderr_prev.log"
 	echo ""
 } >> $log_path_prev || echo "No existing log_path file found."
 
-{
-	cat $error_path 
-	echo "======================================================================="
-	echo ""
-} >> $error_path_prev || echo "No existing error_path file found."
-
-
-# Write start time and filename to BOTH log and error file
-echo "started at $(date) - ${BASH_SOURCE[0]}" | tee $log_path $error_path
 
 {	
 	
@@ -47,6 +36,7 @@ echo "started at $(date) - ${BASH_SOURCE[0]}" | tee $log_path $error_path
 			--exclude "${home_path}/.aws*" \
 			--exclude "${home_path}/.bash_history*" \
 			--exclude "${home_path}/.config/google-chrome*" \
+			--exclude "${home_path}/.dropbox*" \
 			--exclude "${home_path}/.gnupg*" \
 			--exclude "${home_path}/.mozilla*" \
 			--exclude "${home_path}/.vscode*" \
@@ -70,4 +60,4 @@ echo "started at $(date) - ${BASH_SOURCE[0]}" | tee $log_path $error_path
 	done
 
 	echo "Finished at $(date)"
-} > $log_path 2> $error_path   
+} > $log_path 2>&1 
