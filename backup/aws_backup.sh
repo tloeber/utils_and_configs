@@ -5,14 +5,13 @@ destination_bucket_path=$(cat /home/thomas/projects/utils_and_configs/backup/con
 # Explicitly specify user's home path, since Anacron runs script as root
 home_path="/home/thomas"
 # Directories to back up
-backup_origins=("/etc" "$home_path" "$temp_local_backups_path")
+backup_origins=("/etc" "$home_path" "/var/tmp/ubuntu_other")
 aws_profile="b"
 
 # Logging
 log_dir="/var/log/my_programs/backup/aws"
-log_path="${log_dir}/stdout.log"
-log_path_prev="${log_dir}/stdout_prev.log"
-
+log_path="${log_dir}/aws_backup.log"
+log_path_prev="${log_dir}/aws_backup.log"
 # Add logs of last run to file containing all previous logs
 {
 	cat $log_path 
