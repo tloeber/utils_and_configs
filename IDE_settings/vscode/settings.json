@@ -1,0 +1,17 @@
+{
+    "git.ignoreWindowsGit27Warning": true,
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\wsl.exe",
+    "remote.SSH.remotePlatform": {
+        "192.168.68.66": "linux"
+    },
+    "workbench.startupEditor": "newUntitledFile",
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
+    },
+    "python.showStartPage": false,
+    "python.pythonPath": "/home/thomas/anaconda3/bin/python",
+    "editor.minimap.enabled": false,
+    "workbench.colorTheme": "Default Light+",
+    "terminal.integrated.inheritEnv": false,
+    "window.autoDetectColorScheme": true
+}
