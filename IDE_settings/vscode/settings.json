@@ -1,17 +1,43 @@
 {
-    "git.ignoreWindowsGit27Warning": true,
-    "terminal.integrated.shell.windows": "C:\\WINDOWS\\System32\\wsl.exe",
-    "remote.SSH.remotePlatform": {
-        "192.168.68.66": "linux"
-    },
     "workbench.startupEditor": "newUntitledFile",
     "workbench.editorAssociations": {
         "*.ipynb": "jupyter.notebook.ipynb"
     },
-    "python.showStartPage": false,
-    "python.pythonPath": "/home/thomas/anaconda3/bin/python",
-    "editor.minimap.enabled": false,
     "workbench.colorTheme": "Default Light+",
-    "terminal.integrated.inheritEnv": false,
-    "window.autoDetectColorScheme": true
+    "workbench.tree.indent": 15,
+    "workbench.panel.defaultLocation": "right",
+
+    "window.autoDetectColorScheme": true,
+
+    "editor.rulers": [80, 100],
+    "editor.renderWhitespace": "all",
+    "editor.minimap.enabled": false,
+    "editor.insertSpaces": false,
+
+//    "terminal.external.windowsExec": "C:\\Program Files\\Git\\bin\\bash.exe",
+//    "terminal.external.osxExec": "iTerm.app",
+//    "terminal.external.linuxExec":
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "terminal.integrated.inheritEnv": true,
+
+//    "python.condaPath": "C:\\Users\\tloeb\\Anaconda3\\python.exe",
+//    "python.pythonPath": "/home/thomas/anaconda3/bin/python",
+    "python.analysis.typeCheckingMode": "strict",
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.inlayHints.variableTypes": true,
+//    "python.showStartPage": false,
+    "python": {
+        "editor.insertSpaces": true
+    },
+
+    "jupyter.contextualHelp.detailLevel": "verbose",
+    "jupyter.notebookRunGroups.enabled": false,
+    "jupyter.notebookRunGroups.groupCount": 3,
+
+    "git.autofetch": true,
+    "git.ignoreWindowsGit27Warning": true,
+
+    "security.workspace.trust.startupPrompt": "once",
+    "window.zoomLevel": 1
 }
