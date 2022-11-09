@@ -39,5 +39,5 @@
     "git.ignoreWindowsGit27Warning": true,
 
     "security.workspace.trust.startupPrompt": "once",
-    "window.zoomLevel": 1
+    "window.zoomLevel": -1
 }
