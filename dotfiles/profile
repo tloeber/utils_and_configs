@@ -27,7 +27,7 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 
 
-# My own notifications
+# My own modifications
 # ====================
 
 export AWS_CLI_AUTO_PROMPT=on
