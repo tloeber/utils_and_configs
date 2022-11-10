@@ -133,4 +133,5 @@ dmypy.json
 ## ===================
 *.swp
 old/*
+*.code-workspace
 id-*
