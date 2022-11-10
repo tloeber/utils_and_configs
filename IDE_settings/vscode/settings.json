@@ -1,3 +1,5 @@
+// Edit *hard-linked* version of this file using VSCode to get validation as well as documentation when hovering over keys.
+// (Use version in repo to view diff.)
 {
     "workbench.startupEditor": "newUntitledFile",
     "workbench.editorAssociations": {
@@ -5,39 +7,46 @@
     },
     "workbench.colorTheme": "Default Light+",
     "workbench.tree.indent": 15,
-    "workbench.panel.defaultLocation": "right",
+    "workbench.panel.defaultLocation": "right",  // Terminal on the right, not bottom
 
-    "window.autoDetectColorScheme": true,
+    "window.autoDetectColorScheme": true,  // Switch between light and dark mode based on OS appearance
+    "window.zoomLevel": 1,
 
     "editor.rulers": [80, 100],
     "editor.renderWhitespace": "all",
-    "editor.minimap.enabled": false,
-    "editor.insertSpaces": false,
+    "editor.minimap.enabled": false,  // To save screen real estate
+    "editor.insertSpaces": false,  // Replacing tabs with spaces breaks Makefiles. But override by language (e.g., for Python)
+    "editor.acceptSuggestionOnEnter": "on",
 
-//    "terminal.external.windowsExec": "C:\\Program Files\\Git\\bin\\bash.exe",
-//    "terminal.external.osxExec": "iTerm.app",
-//    "terminal.external.linuxExec":
+    // To provide path to shell, or to configure additional shells, specify `terminal.integrated.profiles.$OS_TYPE`.
     "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "terminal.integrated.defaultProfile.osx": "bash",
     "terminal.integrated.enableMultiLinePasteWarning": false,
-    "terminal.integrated.inheritEnv": true,
+    "terminal.integrated.inheritEnv": true,  // New shells inherit env from VSCode. (No effect on Windows)
 
-//    "python.condaPath": "C:\\Users\\tloeb\\Anaconda3\\python.exe",
-//    "python.pythonPath": "/home/thomas/anaconda3/bin/python",
+    "python.languageServer": "Pylance",
     "python.analysis.typeCheckingMode": "strict",
     "python.analysis.inlayHints.functionReturnTypes": true,
     "python.analysis.inlayHints.variableTypes": true,
-//    "python.showStartPage": false,
+    "python.formatting.provider": "black",
+    // "python.linting.pylintEnabled": "true",  // May not be needed anymore, because as of VSCode 1.73, Pylint is a separate extension that works together with Pylance (?)
     "python": {
-        "editor.insertSpaces": true
+        "editor.insertSpaces": true  // Replace tabs with spaces
     },
+    "vsintellicode.features.python.deepLearning": "enabled",
+    "pylint.showNotifications": "onError",
 
     "jupyter.contextualHelp.detailLevel": "verbose",
-    "jupyter.notebookRunGroups.enabled": false,
+    "jupyter.notebookRunGroups.enabled": false,  // Disabled to reduce clutter (not using this at the moment)
     "jupyter.notebookRunGroups.groupCount": 3,
 
     "git.autofetch": true,
     "git.ignoreWindowsGit27Warning": true,
 
+    // Fix whitespaces before saving to avoid spurrious diffs and to easier identify duplications
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,  // If more than one
+
     "security.workspace.trust.startupPrompt": "once",
-    "window.zoomLevel": 1
 }
