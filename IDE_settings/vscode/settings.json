@@ -6,11 +6,11 @@
         "*.ipynb": "jupyter.notebook.ipynb"
     },
     "workbench.colorTheme": "Default Light+",
-    "workbench.tree.indent": 15,
+    "workbench.tree.indent": 25,
     "workbench.panel.defaultLocation": "right",  // Terminal on the right, not bottom
 
-    "window.autoDetectColorScheme": true,  // Switch between light and dark mode based on OS appearance
-    "window.zoomLevel": 1,
+    "window.zoomLevel": 1,  // This changes each time you zoom in or out
+    "window.autoDetectColorScheme": true,
 
     "editor.rulers": [80, 100],
     "editor.renderWhitespace": "all",
@@ -18,14 +18,38 @@
     "editor.insertSpaces": false,  // Replacing tabs with spaces breaks Makefiles. But override by language (e.g., for Python)
     "editor.acceptSuggestionOnEnter": "on",
 
-    // To provide path to shell, or to configure additional shells, specify `terminal.integrated.profiles.$OS_TYPE`.
+    // For projects where conda is used, make this the default shell in workspace settings.
+    // Todo: create template and start tracking it in git
+    "terminal.integrated.profiles.linux": {
+        "BashWithConda": {
+            "path": "bash",
+            "args": [
+                "--init-file",
+                "~/projects/utils_and_configs/python/initialize_conda.sh"
+            ]
+        }
+    },
+    "terminal.integrated.profiles.windows": {
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "BashWithConda": {
+            "path": "${env:HOMEPATH}\\AppData\\Local\\Programs\\Git\\bin\\bash.exe",
+            "args": [
+                "--init-file",
+                "~/projects/utils_and_configs/python/initialize_conda.sh"
+            ]
+        },
+    },
+    // Default profile does not have conda initialized to prevent interference with standard Python
+    "terminal.integrated.defaultProfile.linux": "bash",
     "terminal.integrated.defaultProfile.windows": "Git Bash",
     "terminal.integrated.defaultProfile.osx": "bash",
     "terminal.integrated.enableMultiLinePasteWarning": false,
     "terminal.integrated.inheritEnv": true,  // New shells inherit env from VSCode. (No effect on Windows)
 
     "python.languageServer": "Pylance",
-    "python.analysis.typeCheckingMode": "strict",
+    "python.analysis.typeCheckingMode": "basic",
     "python.analysis.inlayHints.functionReturnTypes": true,
     "python.analysis.inlayHints.variableTypes": true,
     "python.formatting.provider": "black",
@@ -33,15 +57,17 @@
     "python": {
         "editor.insertSpaces": true  // Replace tabs with spaces
     },
-    "vsintellicode.features.python.deepLearning": "enabled",
     "pylint.showNotifications": "onError",
 
     "jupyter.contextualHelp.detailLevel": "verbose",
     "jupyter.notebookRunGroups.enabled": false,  // Disabled to reduce clutter (not using this at the moment)
     "jupyter.notebookRunGroups.groupCount": 3,
 
+    "vsintellicode.features.python.deepLearning": "enabled",
+
     "git.autofetch": true,
     "git.ignoreWindowsGit27Warning": true,
+    "scm.defaultViewMode": "tree",  // How to group modified files in source control view
 
     // Fix whitespaces before saving to avoid spurrious diffs and to easier identify duplications
     "files.trimTrailingWhitespace": true,
