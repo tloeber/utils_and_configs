@@ -7,16 +7,16 @@
     },
     "workbench.colorTheme": "Default Light+",
     "workbench.tree.indent": 25,
-    "workbench.panel.defaultLocation": "right",  // Terminal on the right, not bottom
-
-    "window.zoomLevel": 1,  // This changes each time you zoom in or out
-    "window.autoDetectColorScheme": true,
+	"workbench.panel.defaultLocation": "right",  // Terminal on the right, not bottom
 
     "editor.rulers": [80, 100],
     "editor.renderWhitespace": "all",
-    "editor.minimap.enabled": false,  // To save screen real estate
-    "editor.insertSpaces": false,  // Replacing tabs with spaces breaks Makefiles. But override by language (e.g., for Python)
-    "editor.acceptSuggestionOnEnter": "on",
+	"editor.minimap.enabled": false,
+    "editor.detectIndentation": false,
+	// Replacing tabs with spaces breaks Makefiles. But override by language (e.g., for Python)
+	// Note: This may bee overridden  based on file contents if `editor.detectIndentation` == true. (So set to false)
+	"editor.insertSpaces": false,
+	"editor.acceptSuggestionOnEnter": "on",
 
     // For projects where conda is used, make this the default shell in workspace settings.
     // Todo: create template and start tracking it in git
@@ -54,16 +54,25 @@
     "python.analysis.inlayHints.variableTypes": true,
     "python.formatting.provider": "black",
     // "python.linting.pylintEnabled": "true",  // May not be needed anymore, because as of VSCode 1.73, Pylint is a separate extension that works together with Pylance (?)
-    "python": {
-        "editor.insertSpaces": true  // Replace tabs with spaces
+    "[python]": {
+		// Note: This may bee overridden  based on file contents if `editor.detectIndentation` == true. (So set to false)
+        "editor.insertSpaces": true
     },
     "pylint.showNotifications": "onError",
 
     "jupyter.contextualHelp.detailLevel": "verbose",
     "jupyter.notebookRunGroups.enabled": false,  // Disabled to reduce clutter (not using this at the moment)
     "jupyter.notebookRunGroups.groupCount": 3,
+	"jupyter.debugJustMyCode": false,
+	"notebook.showFoldingControls": "always",
+	"notebook.lineNumbers": "on",
 
-    "vsintellicode.features.python.deepLearning": "enabled",
+	"[markdown]": {
+		"editor.formatOnSave": true,
+		"editor.wordWrap": "on",
+	},
+
+	"vsintellicode.features.python.deepLearning": "enabled",
 
     "git.autofetch": true,
     "git.ignoreWindowsGit27Warning": true,
@@ -74,5 +83,9 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,  // If more than one
 
-    "security.workspace.trust.startupPrompt": "once",
+	"security.workspace.trust.startupPrompt": "once",
+
+	"window.autoDetectColorScheme": true,
+	// zoomlevel changes every time you zoom in/out - Remove if this config is shared.
+	"window.zoomLevel": 1,
 }
