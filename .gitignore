@@ -135,3 +135,11 @@ dmypy.json
 old/*
 *.code-workspace
 id-*
+# PyCharm
+.idea/*
+# Windows links
+*.lnk
+# Folders with old stuff (my own naming convention)
+**/old/**
+# Backup files
+*.bak

@@ -86,6 +86,6 @@
 	"security.workspace.trust.startupPrompt": "once",
 
 	"window.autoDetectColorScheme": true,
-	// zoomlevel changes every time you zoom in/out - Remove if this config is shared.
+	// ZoomLevel changes every time you zoom in/out - Remove if this config is shared.
 	"window.zoomLevel": 1,
 }
