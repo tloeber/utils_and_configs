@@ -17,14 +17,14 @@ alias dn="docker network"
 alias di="docker image"
 alias dib="docker image build"
 
-# Volume 
+# Volume
 alias dv="docker volume"
 
 # Compose
-alias dc="docker-compose"
-alias dcu="docker-compose up"
-alias dcr="docker-compose restart"
-alias dcs="docker-compose down"
+alias dc="docker compose"
+alias dcu="docker compose up"
+alias dcr="docker compose restart"
+alias dcd="docker compose down"
 
 
 # dcr()
@@ -80,7 +80,7 @@ function mc {
 ## ================
 
 function validate_json {
-   (python -mjson.tool "$1" > /dev/null  && echo "json is valid.") || \
+   (python3 -mjson.tool "$1" > /dev/null  && echo "json is valid.") || \
    echo "json is NOT valid."
 }
 
