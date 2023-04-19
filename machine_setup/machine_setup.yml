@@ -1,6 +1,8 @@
 ---
 - hosts: all
   become: true
+  connection: "{{ connection | default('ssh') }}"  # So we can use 'local' for localhost
+
   # vars:
   #   ...
 
@@ -10,27 +12,21 @@
       update_cache=yes
       cache_valid_time=3600
       force_apt_get=yes
-    state: latest
 
   - name: install common packages
     apt:
       name:
         - awscli
         - unzip
-        # todo: make sure we use proper source for docker install: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
-        - docker-ce
-        - docker-ce-cli
-        - containerd.io
-        - docker-buildx-plugin
-        - docker-compose-plugin
+        ## todo: Add upstream for Docker: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+        # - docker-ce
+        # - docker-ce-cli
+        # - containerd.io
+        # - docker-buildx-plugin
+        # - docker-compose-plugin
       state: latest
 
   - name: Add default user to `docker` group, so we can use docker w/o sudo
     user:
-      name: "{{ username }}""
+      name: "{{ username }}"
       groups: "{{ username }},docker"
-    register: docker_user
-
-  - name: restart computer if docker user was updated
-
-    when: docker_user.changed
