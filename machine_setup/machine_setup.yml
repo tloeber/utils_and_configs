@@ -1,6 +1,5 @@
 ---
 - hosts: all
-  become: true
   connection: "{{ connection | default('ssh') }}"  # So we can use 'local' for localhost
 
   # vars:
@@ -8,17 +7,28 @@
 
   tasks:
   - name: Upgrade all apt packages
+    become: true
     apt:
       update_cache=yes
       cache_valid_time=3600
       force_apt_get=yes
 
+    ## todo: Also add upstream for Docker: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+  - name: Add Python repository repository from PPA and install its signing key on Ubuntu target
+    apt_repository:
+      repo: ppa:deadsnakes/ppa
+      state: present
+
   - name: install common packages
+    become: true
     apt:
       name:
         - awscli
         - unzip
-        ## todo: Add upstream for Docker: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+        - python3.9
+        - python3.10
+        - python3.11
+        - python3.12
         # - docker-ce
         # - docker-ce-cli
         # - containerd.io
@@ -27,6 +37,7 @@
       state: latest
 
   - name: Add default user to `docker` group, so we can use docker w/o sudo
+    become: true
     user:
       name: "{{ username }}"
       groups: "{{ username }},docker"

@@ -4,4 +4,4 @@ ansible:
 		&& ansible-playbook -i inventory.ini controlNode_setup.yml
 
 machine_setup:
-	ansible-playbook machine_setup.yml
+	sudo ansible-playbook -v machine_setup.yml
