@@ -1,5 +1,12 @@
 # Setup
 
+## Manual setup
+
+- Copy-paste settings and keybindings from this repo into VSCode's
+- Periodically copy-paste back to see diff and commit changes.
+
+## Automated setup (may not be up to date)
+
 To start using the settings from this repo on your machine,
 
 - On Windows only: Move/rename existing versions of keybindings.json and settings.json (automated in shell script but not batch file.)
