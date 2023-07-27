@@ -1,21 +1,22 @@
 #!/bin/bash
+set -eu
 
 # Whole directories to back up
 backup_origins=("/c/Users/tloeb/desktop" \
   "/c/Users/tloeb/AppData/Roaming/Mozilla/Firefox/Profiles/r8wk84di.default-release/bookmarkbackups" \
   "/f")
-backup_origins_deep_archives=("/r")
+backup_origins_deep_archives=("/r" "/v")
 # Individual files to backup
 backup_files=("/c/Users/tloeb/AppData/Local/Google/Chrome/User Data/Default/Bookmarks")
 aws_profile="b"
 log_path="/c/logs/backups/s3_backup_sync.log"
 # Keep name of S3 bucket out of version control (just in case)
-destination_bucket_path=$(cat /f/projects/utils_and_configs/backup/config/backup_destination.txt)
+destination_bucket_path=$(cat /c/users/tloeb/projects/utils_and_configs/backup/config/backup_destination.txt)
 
 {
 	# Directories
 	# -----------
-    
+
 	echo ""
 	echo "========================================="
 	echo ""
@@ -28,7 +29,7 @@ destination_bucket_path=$(cat /f/projects/utils_and_configs/backup/config/backup
 		aws s3 sync "$dir" "s3://${destination_bucket_path}${dir}" \
 			--storage-class=STANDARD_IA \
 			--profile=$aws_profile \
-			--exclude "*$RECYCLE.BIN*" \
+			--exclude '*$RECYCLE.BIN*' \
 			--exclude "*.git*" \
 			--exclude "*.Rproj*" \
 			--exclude "*.joblib.*" \
@@ -36,7 +37,7 @@ destination_bucket_path=$(cat /f/projects/utils_and_configs/backup/config/backup
 			--exclude "*IDriveLocal*" \
 			--sse aws:kms \
 			--delete \
-			# --dryrun 			
+			# --dryrun
 	done
 
 
@@ -50,11 +51,11 @@ destination_bucket_path=$(cat /f/projects/utils_and_configs/backup/config/backup
 			--storage-class=DEEP_ARCHIVE \
 			--profile=$aws_profile \
 			--exclude "*$RECYCLE.BIN*" \
-			--delete 
-			# --dryrun 			
+			--delete
+			# --dryrun
 	done
 
-	# New line 
+	# New line
 	echo ""
 
 
@@ -72,14 +73,14 @@ destination_bucket_path=$(cat /f/projects/utils_and_configs/backup/config/backup
 			--include "$path" \
 			--sse aws:kms \
 			--delete \
-			# --dryrun 		
+			# --dryrun
 	done
 
 	echo "Finished at $(date)"
 	#  2 new lines before next log entry
 	echo ""
 	echo ""
-	
+
 } > $log_path 2>&1
 
-$SHELL	
+$SHELL
