@@ -1,17 +1,19 @@
 #!/bin/bash
 set -eu
 
-# Whole directories to back up
-backup_origins=("/c/Users/tloeb/desktop" \
-  "/c/Users/tloeb/AppData/Roaming/Mozilla/Firefox/Profiles/r8wk84di.default-release/bookmarkbackups" \
-  "/f")
-backup_origins_deep_archives=("/r" "/v")
-# Individual files to backup
-backup_files=("/c/Users/tloeb/AppData/Local/Google/Chrome/User Data/Default/Bookmarks")
+# *Disable* AWS CLI auto-promp (See https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html#envvars-list-aws_cli_auto_prompt)
+AWS_CLI_AUTO_PROMPT="on-partial"
+
+# Whole *directories* to back up
+backup_origins=("/mnt/c/Users/tloeb/desktop" "/mnt/f/") #   "/mnt/c/Users/tloeb/AppData/Roaming/Mozilla/Firefox/Profiles/r8wk84di.default-release/bookmarkbackups"
+backup_origins_for_deep_archive=("/mnt/r/" "/mnt/v")
+# Individual *files* to backup
+backup_files=("/mnt/c/Users/tloeb/AppData/Local/Google/Chrome/User Data/Default/Bookmarks")
+
 aws_profile="b"
-log_path="/c/logs/backups/s3_backup_sync.log"
+log_path="/mnt/c/logs/backups/s3_backup_sync.log"
 # Keep name of S3 bucket out of version control (just in case)
-destination_bucket_path=$(cat /c/users/tloeb/projects/utils_and_configs/backup/config/backup_destination.txt)
+destination_bucket_path=$(cat ${HOME}/projects/utils_and_configs/backup/config/backup_destination.txt)
 
 {
 	# Directories
@@ -29,7 +31,7 @@ destination_bucket_path=$(cat /c/users/tloeb/projects/utils_and_configs/backup/c
 		aws s3 sync "$dir" "s3://${destination_bucket_path}${dir}" \
 			--storage-class=STANDARD_IA \
 			--profile=$aws_profile \
-			--exclude '*$RECYCLE.BIN*' \
+			--exclude "*\$RECYCLE.BIN*" \
 			--exclude "*.git*" \
 			--exclude "*.Rproj*" \
 			--exclude "*.joblib.*" \
@@ -45,7 +47,7 @@ destination_bucket_path=$(cat /c/users/tloeb/projects/utils_and_configs/backup/c
 	# -------------------------
 
 	echo "Backing up whole directories to Glacier Deep Archive:"
-	for dir in "${backup_origins_deep_archives[@]}"; do
+	for dir in "${backup_origins_for_deep_archive[@]}"; do
 		# It's not possible to specify KMS encryption for Glacier. It's automatically encrypted using AES-256.
 		aws s3 sync "$dir" "s3://${destination_bucket_path}${dir}" \
 			--storage-class=DEEP_ARCHIVE \
