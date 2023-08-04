@@ -23,8 +23,8 @@
     become: true
     apt:
       name:
-        - awscli
         - unzip
+        - python3.8
         - python3.9
         - python3.10
         - python3.11
@@ -35,6 +35,29 @@
         # - docker-buildx-plugin
         # - docker-compose-plugin
       state: latest
+
+  - name: Make sure we don't have v1 of AWS CLI installed
+    become: true
+    apt:
+      name:
+        - awscli
+      state: absent
+
+  - name: Unarchive a file that needs to be downloaded (added in 2.0)
+    ansible.builtin.unarchive:
+      src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+      dest: /home/{{ ansible_user }}/bin/
+      creates: /home/{{ ansible_user }}/bin/aws/
+      remote_src: yes
+
+  - name: Install AWS CLI v2
+    become: true
+    shell: |
+      cd /home/{{ ansible_user }}/bin/aws/
+      ./install
+    args:
+      executable: /bin/bash
+
 
   - name: Add default user to `docker` group, so we can use docker w/o sudo
     become: true
