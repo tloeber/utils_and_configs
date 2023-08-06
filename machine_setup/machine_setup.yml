@@ -2,8 +2,10 @@
 - hosts: all
   connection: "{{ connection | default('ssh') }}"  # So we can use 'local' for localhost
 
-  # vars:
-  #   ...
+  vars:
+    # As of Aug 2023. See https://www.hashicorp.com/official-packaging-guide
+    hashicorp_key_fingerprint: 798AEC654E5C15428C8E42EEAA16FCBCA621E701
+
 
   tasks:
   - name: Upgrade all apt packages
@@ -29,6 +31,9 @@
         - python3.10
         - python3.11
         - python3.12
+        - gnupg
+        - software-properties-common
+        - curl
         # - docker-ce
         # - docker-ce-cli
         # - containerd.io
@@ -56,6 +61,39 @@
     become: true
     shell: bash /home/{{ ansible_user }}/bin/aws/install
     when: aws_cli_download.changed
+
+  - name: Install Hashicorp GPG key
+    ansible.builtin.shell: >
+      wget -O- https://apt.releases.hashicorp.com/gpg
+      | gpg --dearmor
+      | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+  - name: Verify key fingerprint
+    ansible.builtin.shell: >
+      gpg --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --list-keys
+      | grep -q {{ hashicorp_key_fingerprint }}
+    register: hashicorp_key_fingerprint_verified
+
+
+  - name: Get Ubuntu codename
+    ansible.builtin.shell: >
+      lsb_release -cs
+    register: ubuntu_codename
+
+  - name: Install Hashicorp repository
+    apt_repository:
+      repo: >
+        deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg]
+          https://apt.releases.hashicorp.com {{ ubuntu_codename.stdout }} main
+      state: present
+
+  - name: Install Terraform
+    become: true
+    apt:
+      update_cache: yes
+      name:
+        - terraform
+      state: latest
 
   - name: Add default user to `docker` group, so we can use docker w/o sudo
     become: true
