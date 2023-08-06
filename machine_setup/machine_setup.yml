@@ -43,21 +43,19 @@
         - awscli
       state: absent
 
-  - name: Unarchive a file that needs to be downloaded (added in 2.0)
+  - name: Download AWS CLI v2
     ansible.builtin.unarchive:
       src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
       dest: /home/{{ ansible_user }}/bin/
+      # This makes sure download is skipped if folder already exists
       creates: /home/{{ ansible_user }}/bin/aws/
       remote_src: yes
+    register: aws_cli_download
 
-  - name: Install AWS CLI v2
+  - name: Install AWS CLI v2, if it was downloaded
     become: true
-    shell: |
-      cd /home/{{ ansible_user }}/bin/aws/
-      ./install
-    args:
-      executable: /bin/bash
-
+    shell: bash /home/{{ ansible_user }}/bin/aws/install
+    when: aws_cli_download.changed
 
   - name: Add default user to `docker` group, so we can use docker w/o sudo
     become: true
