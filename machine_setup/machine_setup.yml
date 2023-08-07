@@ -41,6 +41,15 @@
         # - docker-compose-plugin
       state: latest
 
+  - name: Add default user to `docker` group, so we can use docker w/o sudo
+    become: true
+    user:
+      name: "{{ username }}"
+      groups: "{{ username }},docker"
+
+
+  # AWS CLI
+  # -------
   - name: Make sure we don't have v1 of AWS CLI installed
     become: true
     apt:
@@ -48,11 +57,11 @@
         - awscli
       state: absent
 
-  - name: Download AWS CLI v2
-    ansible.builtin.unarchive:
+  - name: Download AWS CLI v2, if it's not already downloaded
+    unarchive:
       src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
       dest: /home/{{ ansible_user }}/bin/
-      # This makes sure download is skipped if folder already exists
+      # `creates` makes sure download is skipped if folder already exists
       creates: /home/{{ ansible_user }}/bin/aws/
       remote_src: yes
     register: aws_cli_download
@@ -62,22 +71,25 @@
     shell: bash /home/{{ ansible_user }}/bin/aws/install
     when: aws_cli_download.changed
 
+
+  # Terraform
+  # ---------
   - name: Install Hashicorp GPG key
-    ansible.builtin.shell: >
+    become: true
+    shell: >
       wget -O- https://apt.releases.hashicorp.com/gpg
       | gpg --dearmor
-      | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+      > /usr/share/keyrings/hashicorp-archive-keyring.gpg
 
   - name: Verify key fingerprint
-    ansible.builtin.shell: >
+    shell: >
       gpg --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --list-keys
       | grep -q {{ hashicorp_key_fingerprint }}
+    # Note that grep fails with rc=1 if no match is found
     register: hashicorp_key_fingerprint_verified
 
-
-  - name: Get Ubuntu codename
-    ansible.builtin.shell: >
-      lsb_release -cs
+  - name: Get Ubuntu codename (for Hashicorp repository)
+    shell: lsb_release -cs
     register: ubuntu_codename
 
   - name: Install Hashicorp repository
@@ -86,6 +98,7 @@
         deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg]
           https://apt.releases.hashicorp.com {{ ubuntu_codename.stdout }} main
       state: present
+    when: hashicorp_key_fingerprint_verified.rc == 0  # Just in case
 
   - name: Install Terraform
     become: true
@@ -94,9 +107,3 @@
       name:
         - terraform
       state: latest
-
-  - name: Add default user to `docker` group, so we can use docker w/o sudo
-    become: true
-    user:
-      name: "{{ username }}"
-      groups: "{{ username }},docker"
