@@ -47,6 +47,14 @@
       name: "{{ username }}"
       groups: "{{ username }},docker"
 
+  - name: Create bin folder for user
+    file:
+      path: /home/{{ ansible_user }}/bin
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: '0755'
+
 
   # AWS CLI
   # -------
