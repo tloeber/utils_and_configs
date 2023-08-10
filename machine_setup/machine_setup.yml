@@ -76,7 +76,8 @@
 
   - name: Install AWS CLI v2, if it was downloaded
     become: true
-    shell: bash /home/{{ ansible_user }}/bin/aws/install
+    # Using the `update` flag so install does not fail in case it has been installed outside of Ansible.
+    shell: bash /home/{{ ansible_user }}/bin/aws/install --update
     when: aws_cli_download.changed
 
 
