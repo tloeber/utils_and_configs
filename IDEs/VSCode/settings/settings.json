@@ -5,7 +5,7 @@
 
     "workbench.startupEditor": "newUntitledFile",
     "workbench.editorAssociations": {
-        "*.ipynb": "jupyter.notebook.ipynb"
+        "*.ipynb": "jupyter-notebook"
     },
     "workbench.tree.indent": 25,
     "workbench.panel.defaultLocation": "right",  // Terminal on the right, not bottom
@@ -13,12 +13,13 @@
     "editor.rulers": [80, 100],
     "editor.renderWhitespace": "all",
     "editor.minimap.enabled": false,
-    "editor.detectIndentation": false,
-    // Replacing tabs with spaces breaks Makefiles. But override by language (e.g., for Python)
-    // Note: This may bee overridden  based on file contents if `editor.detectIndentation` == true. (So set to false)
-    "editor.insertSpaces": false,
     "editor.acceptSuggestionOnEnter": "on",
     "editor.accessibilitySupport": "off",
+
+    // Replace tabs with spaces by default, but detect indentation. Thus, for files were we want tabs instead (e.g., Makefiles), we only have to manually change
+    // to tabs on initial file creation. The preferred solution would be to override this setting by language, but I did not find a way to do this for `make`.
+    "editor.detectIndentation": true,
+    "editor.insertSpaces": true,
 
     // For projects where conda is used, make this the default shell in workspace settings.
     // Todo: create template and start tracking it in git
@@ -54,12 +55,10 @@
     "python.analysis.typeCheckingMode": "basic",
     "python.analysis.inlayHints.functionReturnTypes": true,
     "python.analysis.inlayHints.variableTypes": true,
-    "python.formatting.provider": "black",
-    // "python.linting.pylintEnabled": "true",  // May not be needed anymore, because as of VSCode 1.73, Pylint is a separate extension that works together with Pylance (?)
     "[python]": {
-        // Note: This may bee overridden  based on file contents if `editor.detectIndentation` == true. (So set to false)
-        "editor.insertSpaces": true,
-        "editor.formatOnType": true
+        "editor.defaultFormatter": "ms-python.black-formatter",  // "ms-python.autopep8",
+        "editor.formatOnType": true,
+        "editor.formatOnSave": true,
     },
     "pylint.showNotifications": "onError",
 
@@ -76,7 +75,7 @@
         "editor.wordWrap": "on",
     },
 
-    "vsintellicode.features.python.deepLearning": "enabled",
+    // "vsintellicode.features.python.deepLearning": "enabled",  // deprecated?
 
     "git.autofetch": true,
     "git.ignoreWindowsGit27Warning": true,
@@ -129,7 +128,20 @@
         "security.workspace.trust.untrustedFiles": "open",
         "files.autoSave": "afterDelay",
         "editor.inlineSuggest.enabled": true,
-        "workbench.colorTheme": "Quiet Light",
+        "workbench.colorTheme": "Visual Studio Light",
         "git.openRepositoryInParentFolders": "always",
-        "window.zoomLevel": -1,
-}
+		"diffEditor.ignoreTrimWhitespace": false,
+		"workbench.preferredLightColorTheme": "Visual Studio Light",
+
+		"terraform.experimentalFeatures.validateOnSave": true,
+		"[terraform]": {
+			"editor.defaultFormatter": "hashicorp.terraform",
+			"editor.formatOnSave": true,
+			"editor.formatOnSaveMode": "file"
+		  },
+		  "[terraform-vars]": {
+			"editor.defaultFormatter": "hashicorp.terraform",
+			"editor.formatOnSave": true,
+			"editor.formatOnSaveMode": "file"
+		  }
+	}
