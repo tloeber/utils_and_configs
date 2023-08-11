@@ -1,0 +1,11 @@
+// This file is used to set a different theme. Use it **outside of WSL** to distinguish from "main" workspace on WSL.
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"workbench.colorTheme": "Solarized Light"
+	}
+}

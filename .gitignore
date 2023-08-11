@@ -133,7 +133,8 @@ dmypy.json
 ## ===================
 *.swp
 old/*
-*.code-workspace
+# Personal workspaces we do not want to track in version control
+workspaces/**.code-workspace
 id-*
 # PyCharm
 .idea/*
