@@ -4,9 +4,12 @@ code --install-extension DavidAnson.vscode-markdownlint
 code --install-extension eamodio.gitlens
 code --install-extension GitHub.copilot
 code --install-extension GitHub.vscode-pull-request-github
+code --install-extension googlecloudtools.cloudcode
 code --install-extension hashicorp.terraform
 code --install-extension jebbs.plantuml
 code --install-extension ms-azuretools.vscode-docker
+code --install-extension ms-python.autopep8
+code --install-extension ms-python.black-formatter
 code --install-extension ms-python.isort
 code --install-extension ms-python.pylint
 code --install-extension ms-python.python
