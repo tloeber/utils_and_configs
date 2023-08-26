@@ -21,13 +21,24 @@
     "editor.detectIndentation": true,
     "editor.insertSpaces": true,
 
-    // For projects where conda is used, make this the default shell in workspace settings.
-    // Todo: create template and start tracking it in git
+
     "terminal.integrated.profiles.linux": {
-        "BashWithConda": {
+        // Default
+        // - conda is not on Path
+        // - Load IDE-specific env variables
+        "BashWithoutConda": {
             "path": "bash",
             "args": [
                 "--init-file",
+                "~/.env_IDE"
+            ]
+        },
+        // For projects where conda is used, make this the default shell in workspace settings.
+        // Todo: create template and start tracking it in git
+        "BashWithConda": {
+            "path": "bash",
+            "args": [
+                "--init-file",  // This file should also source ~/.env_IDE
                 "~/projects/utils_and_configs/python/initialize_conda.sh"
             ]
         }
@@ -45,7 +56,7 @@
         },
     },
     // Default profile does not have conda initialized to prevent interference with standard Python
-    "terminal.integrated.defaultProfile.linux": "bash",
+    "terminal.integrated.defaultProfile.linux": "BashWithoutConda",
     "terminal.integrated.defaultProfile.windows": "Git Bash",
     "terminal.integrated.defaultProfile.osx": "bash",
     "terminal.integrated.enableMultiLinePasteWarning": false,

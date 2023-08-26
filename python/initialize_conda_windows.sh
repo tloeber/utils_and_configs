@@ -12,3 +12,5 @@ if [ -f "/c/Users/tloeb/Anaconda3/etc/profile.d/conda.sh" ]; then
 fi
 # <<< conda initialize <<<
 
+# In addition, load IDE-specific env variables
+source ~/.env_IDE
