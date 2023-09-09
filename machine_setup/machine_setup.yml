@@ -26,11 +26,17 @@
     apt:
       name:
         - unzip
+        # 3.8 is oldest version that still receives security support, as of Aug 2023. Remove Oct 2024.
         - python3.8
+        - python3.8-venv
         - python3.9
+        - python3.9-venv
         - python3.10
+        - python3.10-venv
         - python3.11
+        - python3.11-venv
         - python3.12
+        - python3.12-venv
         - gnupg
         - software-properties-common
         - curl
@@ -41,11 +47,72 @@
         # - docker-compose-plugin
       state: latest
 
+  # Docker
+  # ------
+  # See https://docs.docker.com/engine/install/ubuntu/
+
+  - name: Uninstall *unofficial* Docker distribution from APT
+    become: true
+    apt:
+      name:
+        - docker.io
+        - docker-compose
+        - docker.doc
+        - podman-docker
+        - containerd
+        - containerd.io
+        - runc
+      state: absent
+
   - name: Add default user to `docker` group, so we can use docker w/o sudo
     become: true
     user:
       name: "{{ username }}"
       groups: "{{ username }},docker"
+
+  - name: Install docker's official GPG key
+    become: true
+    shell: >
+      wget -O- https://download.docker.com/linux/ubuntu/gpg
+      | gpg --dearmor
+      > /usr/share/keyrings/docker.gpg
+
+  # - name: Verify key fingerprint
+  #   shell: >
+  #     gpg --keyring /usr/share/keyrings/docker.gpg --list-keys
+  #     | grep -q {{ docker_key_fingerprint }}
+  #   # Note that grep fails with rc=1 if no match is found
+  #   register: docker_key_fingerprint_verified
+
+  - name: Get Ubuntu codename (for repository repository)
+    shell: lsb_release -cs
+    register: ubuntu_codename
+
+  - name: Install docker repository
+    apt_repository:
+      repo: >
+        deb [signed-by=/usr/share/keyrings/docker.gpg]
+          https://download.docker.com/linux/ubuntu {{ ubuntu_codename.stdout }} stable
+      state: present
+    # when: docker_key_fingerprint_verified.rc == 0  # Just in case
+
+  - name: Install docker
+    become: true
+    apt:
+      update_cache: yes
+      name:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+        - docker-buildx-plugin
+        - docker-compose-plugin
+      state: latest
+
+  - name: Test docker
+    become: true
+    shell: docker run hello-world
+    failed_when: docker_test.rc != 0
+
 
   - name: Create bin folder for user
     file:
@@ -116,3 +183,9 @@
       name:
         - terraform
       state: latest
+
+
+# Other:
+# Install python packages that should go into main environment: mypy, black, pipenv, poetry, pandas-stubs
+# pip install --upgrade pip?
+# pypy --install-types?
