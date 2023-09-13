@@ -4,4 +4,4 @@
 c.InteractiveShellApp.extensions = ["nb_mypy"]
 
 # Use strict mode
-# c.InteractiveShellApp.exec_lines = ["%nb_mypy mypy-options --strict"]
+c.InteractiveShellApp.exec_lines = ["%nb_mypy mypy-options --strict --pretty"]

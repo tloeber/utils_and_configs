@@ -8,6 +8,21 @@
 
 
   tasks:
+
+  # Folder structure
+  # ================
+  - name: Create bin folder for user
+    file:
+      path: /home/{{ ansible_user }}/bin
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: '0755'
+
+
+  # Install Packages
+  # ================
+
   - name: Upgrade all apt packages
     become: true
     apt:
@@ -50,6 +65,9 @@
   # Docker
   # ------
   # See https://docs.docker.com/engine/install/ubuntu/
+  # Note that this is usually not necessary on WSL if you have Docker Desktop installed.
+  # However, this alternative can still be useful on WSL, since Docler Desltop is no longer
+  # free for commercial usage in most cases.
 
   - name: Uninstall *unofficial* Docker distribution from APT
     become: true
@@ -63,12 +81,6 @@
         - containerd.io
         - runc
       state: absent
-
-  - name: Add default user to `docker` group, so we can use docker w/o sudo
-    become: true
-    user:
-      name: "{{ username }}"
-      groups: "{{ username }},docker"
 
   - name: Install docker's official GPG key
     become: true
@@ -108,19 +120,11 @@
         - docker-compose-plugin
       state: latest
 
-  - name: Test docker
+  - name: Add default user to `docker` group, so we can use docker w/o sudo
     become: true
-    shell: docker run hello-world
-    failed_when: docker_test.rc != 0
-
-
-  - name: Create bin folder for user
-    file:
-      path: /home/{{ ansible_user }}/bin
-      state: directory
-      owner: "{{ ansible_user }}"
-      group: "{{ ansible_user }}"
-      mode: '0755'
+    user:
+      name: "{{ ansible_user }}"
+      groups: "{{ ansible_user }},docker"
 
 
   # AWS CLI

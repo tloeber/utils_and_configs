@@ -8,7 +8,9 @@ sudo apt update
 sudo apt upgrade -y
 sudo apt install -y git make
 
-# No error if directory already exists
-mkdir -p repos
-cd repos
-git clone git@github.com:tloeber/utils_and_configs.git
+# Clone setup repo, if it does not already exist
+if [ ! -d "$HOME/.local/repos/utils_and_configs" ] ; then
+    mkdir ~/repos || echo "~/repos/ already exists."
+    cd repos
+    git clone https://github.com/tloeber/utils_and_configs.git
+fi

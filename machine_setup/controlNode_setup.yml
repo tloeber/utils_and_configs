@@ -5,9 +5,9 @@
   gather_facts: no
 
   tasks:
-    - name: Python dependencies for Ansible modules
-      ansible.builtin.pip:
-        name:
-          - boto3 >= 1.18.0
-          - botocore >= 1.21.0
-        state: present
+  - name: Python dependencies for Ansible modules
+    ansible.builtin.pip:
+      name:
+        - boto3 >= 1.18.0
+        - botocore >= 1.21.0
+      state: present

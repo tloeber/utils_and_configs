@@ -1,3 +1,8 @@
+# Usage (Ubuntu)
+
+- To perform an **initial setup**, start by running the bootstraps script: `bash bootstrap.sh`. Note that we may not have `make` available on a new machine, therefore this step is not defined in the makefile. This script installs `make`, as well as git, and clones this repo if it does not already exist (in the expected location).
+-
+
 # Notes
 
 ## AWS CLI
