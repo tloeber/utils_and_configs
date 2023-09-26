@@ -19,6 +19,14 @@
       group: "{{ ansible_user }}"
       mode: '0755'
 
+  - name: Create config folder for user. Add mypy subfolder. Todo: Add others.
+    file:
+      path: /home/{{ ansible_user }}/.config/mypy/
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: '0755'
+
 
   # Install Packages
   # ================
@@ -42,15 +50,15 @@
       name:
         - unzip
         # 3.8 is oldest version that still receives security support, as of Aug 2023. Remove Oct 2024.
-        - python3.8
+        - python3.8-dev
         - python3.8-venv
-        - python3.9
+        - python3.9-dev
         - python3.9-venv
-        - python3.10
+        - python3.10-dev
         - python3.10-venv
-        - python3.11
+        - python3.11-dev
         - python3.11-venv
-        - python3.12
+        - python3.12-dev
         - python3.12-venv
         - gnupg
         - software-properties-common
@@ -183,6 +191,9 @@
       name:
         - terraform
       state: latest
+
+
+# todo: copy dotfiles (incl mypy, pylint, etc)
 
 
 # Other:
