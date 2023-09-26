@@ -19,7 +19,7 @@
       group: "{{ ansible_user }}"
       mode: '0755'
 
-  - name: Create config folder for user. Add mypy subfolder. Todo: Add others.
+  - name: Create config folder for user. Add mypy subfolder. Todo - Add others.
     file:
       path: /home/{{ ansible_user }}/.config/mypy/
       state: directory
