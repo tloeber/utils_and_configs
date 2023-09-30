@@ -38,37 +38,36 @@
       cache_valid_time=3600
       force_apt_get=yes
 
-    ## todo: Also add upstream for Docker: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
-  - name: Add Python repository repository from PPA and install its signing key on Ubuntu target
+  # Python
+  # ------
+
+  # Convention is to use this repo, since apt does not have all current python versions
+  - name: Add Python repository from PPA and install its signing key on Ubuntu target
     apt_repository:
       repo: ppa:deadsnakes/ppa
       state: present
 
-  - name: install common packages
+  - name: install all current versions of Python.
     become: true
     apt:
       name:
-        - unzip
-        # 3.8 is oldest version that still receives security support, as of Aug 2023. Remove Oct 2024.
-        - python3.8-dev
-        - python3.8-venv
-        - python3.9-dev
-        - python3.9-venv
-        - python3.10-dev
-        - python3.10-venv
-        - python3.11-dev
-        - python3.11-venv
-        - python3.12-dev
-        - python3.12-venv
-        - gnupg
-        - software-properties-common
-        - curl
-        # - docker-ce
-        # - docker-ce-cli
-        # - containerd.io
-        # - docker-buildx-plugin
-        # - docker-compose-plugin
+        # See here how Python is broken up into multiple packages: https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa
+        # I.e., even DeadSnakes repo follows Debian's convention of having multiple packages for each Python version.
+        - "python{{ item }}-dev"
+        - "python{{ item }}-venv"
+        - "python{{ item }}-distutils"
+        ## To fix dependency issues (problems using pip/pipenv/pipinstall)
+        - "python3-six"
+        # https://gist.github.com/y56/0540d22a1db40dacc7fbbb93c866821e
+        - "python3-testresources"
       state: latest
+    loop:
+      # 3.8 is oldest version that still receives security support, as of Aug 2023. Remove Oct 2024.
+      - "3.8"
+      - "3.9"
+      - "3.10"
+      - "3.11"
+      - "3.12"
 
   # Docker
   # ------
@@ -78,7 +77,7 @@
   # free for commercial usage in most cases.
 
   - name: Install docker's official GPG key
-    become: true
+    become:
     shell: >
       wget -O- https://download.docker.com/linux/ubuntu/gpg
       | gpg --dearmor
@@ -111,7 +110,6 @@
       state: absent
     when: docker_repository_installed.changed
 
-
   - name: Install docker
     become: true
     apt:
@@ -129,6 +127,18 @@
     user:
       name: "{{ ansible_user }}"
       groups: "{{ ansible_user }},docker"
+
+  # Other APT packages
+  # ------------------
+  - name: install other common packages
+    become: true
+    apt:
+      name:
+        - unzip
+        - gnupg
+        - software-properties-common
+        - curl
+      state: latest
 
 
   # AWS CLI
@@ -193,10 +203,8 @@
       state: latest
 
 
-# todo: copy dotfiles (incl mypy, pylint, etc)
-
-
-# Other:
-# Install python packages that should go into main environment: mypy, black, pipenv, poetry, pandas-stubs
-# pip install --upgrade pip?
-# pypy --install-types?
+# todo:
+# - copy dotfiles (incl mypy, pylint, etc)
+# - Install python packages that should go into main environment: mypy, black, pipenv, poetry, pandas-stubs. Use  install --user pipenv ?
+# - pip install --upgrade pip?
+# - pypy --install-types?
