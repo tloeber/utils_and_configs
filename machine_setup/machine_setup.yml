@@ -35,6 +35,14 @@
       group: "{{ ansible_user }}"
       mode: '0755'
 
+  - name: Create .local/bin folder for user
+    file:
+      path: /home/{{ ansible_user }}/.local/bin
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: '0755'
+
   - name: Create config folder for user. Add mypy subfolder. Todo - Add others.
     file:
       path: /home/{{ ansible_user }}/.config/mypy/
@@ -59,6 +67,8 @@
     apt:
       name: "*"
       state: latest
+    no_log: true
+
 
   # Python
   # ------
