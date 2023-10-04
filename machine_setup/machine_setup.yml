@@ -9,6 +9,22 @@
 
   tasks:
 
+  - name: Log username (should not be `root`)
+    debug:
+      msg: "Running as user {{ ansible_user }}"
+
+  # Dotfiles
+  # ========
+  - name:  Copy dotfiles from this repo to user's home folder
+    copy:
+      src: ../shell-dotfiles/
+      remote_src: false  # Copy from control node
+      dest: "/home/{{ ansible_user }}/"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: '0644'
+      backup: yes  # Will be in same directory as src file
+
   # Folder structure
   # ================
   - name: Create bin folder for user
@@ -31,12 +47,18 @@
   # Install Packages
   # ================
 
-  - name: Upgrade all apt packages
+  - name: Update apt cache
     become: true
     apt:
       update_cache=yes
       cache_valid_time=3600
-      force_apt_get=yes
+      force_apt_get=yes  # Use apt, not aptitude
+    no_log: true
+
+  - name: Update all packages to  latest version
+    apt:
+      name: "*"
+      state: latest
 
   # Python
   # ------
@@ -130,7 +152,7 @@
 
   # Other APT packages
   # ------------------
-  - name: install other common packages
+  - name: install other common packages from apt
     become: true
     apt:
       name:
@@ -139,6 +161,15 @@
         - software-properties-common
         - curl
       state: latest
+
+  - name: Remove dependencies no longer needed
+    apt:
+      autoremove: yes
+      purge: true
+
+  - name: Clear local repo of downloaded packages
+    apt:
+      clean: yes
 
 
   # AWS CLI
