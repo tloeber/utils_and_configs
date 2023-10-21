@@ -1,4 +1,5 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
+# ~/.bashrc: executed by bash(1) for **non-login** shells (e.g., **VSCode integrated terminal**).
+
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
@@ -116,26 +117,43 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/thomas/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/thomas/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/thomas/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/thomas/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
-export PATH="/usr/local/bin:/home/thomas/path:$PATH"
+# export PATH="/usr/local/bin:/home/thomas/path:$PATH"
 #export PATH="/home/thomas/path:$PATH"
 
-# Tmux: Separate history file per  pane
+
+# Path
+# ====
+
+# set PATH so it includes user's private bin
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+# set PATH so it includes user's private bin
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
+
+# Programs
+# ========
+# Tmux
+# ----
+# Separate history file per  pane
 #if [[ $TMUX_PANE ]]; then
 #  HISTFILE=$HOME/.bash_history_tmux_${TMUX_PANE:1}
 #fi
-HISTFILE=$HOME/.bash_history2
+# HISTFILE=$HOME/.bash_history2
+
+
+# ASDF
+# ----
+# Run *after* setting PATH
+. "$HOME/.local/bin/asdf/asdf.sh"
+# Code completion
+. "$HOME/.local/bin/asdf/completions/asdf.bash"
+
+
+# Log
+# ===
+echo "Sourced .bashrc"

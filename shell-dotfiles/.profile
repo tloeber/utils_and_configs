@@ -1,5 +1,4 @@
-# By default, this is only read for login shells - but we also source this
-# in .bashrc, which in turn is read by non-login shells.
+# Only read by **non-bash login** shells.
 
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
