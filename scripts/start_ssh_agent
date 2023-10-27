@@ -1,0 +1,4 @@
+KEY_NAME="id_personal"
+
+eval $(ssh-agent -s)
+ssh-add ~/.ssh/${KEY_NAME}
