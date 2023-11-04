@@ -10,7 +10,7 @@
     "workbench.tree.indent": 25,
     "workbench.panel.defaultLocation": "right",  // Terminal on the right, not bottom
 
-    "editor.rulers": [80, 100],
+    "editor.rulers": [88, 100],
     "editor.renderWhitespace": "all",
     "editor.minimap.enabled": false,
     "editor.acceptSuggestionOnEnter": "on",
@@ -21,25 +21,14 @@
     "editor.detectIndentation": true,
     "editor.insertSpaces": true,
 
-
+    // For projects where conda is used, make this the default shell in workspace settings.
+    // Todo: create template and start tracking it in git
     "terminal.integrated.profiles.linux": {
-        // Default
-        // - conda is not on Path
-        // - Load IDE-specific env variables
-        "BashWithoutConda": {
-            "path": "bash",
-            "args": [
-                "--init-file",
-                "~/.env_IDE"
-            ]
-        },
-        // For projects where conda is used, make this the default shell in workspace settings.
-        // Todo: create template and start tracking it in git
         "BashWithConda": {
             "path": "bash",
             "args": [
-                "--init-file",  // This file should also source ~/.env_IDE
-                "~/projects/utils_and_configs/python/initialize_conda.sh"
+                "--init-file",
+                "~/projects/utils_and_configs/python/initialize_conda_unix.sh"
             ]
         }
     },
@@ -51,12 +40,12 @@
             "path": "${env:HOMEPATH}\\AppData\\Local\\Programs\\Git\\bin\\bash.exe",
             "args": [
                 "--init-file",
-                "~/projects/utils_and_configs/python/initialize_conda.sh"
+                "~/projects/utils_and_configs/python/initialize_conda_windows.sh"
             ]
         },
     },
     // Default profile does not have conda initialized to prevent interference with standard Python
-    "terminal.integrated.defaultProfile.linux": "BashWithoutConda",
+    "terminal.integrated.defaultProfile.linux": "bash",
     "terminal.integrated.defaultProfile.windows": "Git Bash",
     "terminal.integrated.defaultProfile.osx": "bash",
     "terminal.integrated.enableMultiLinePasteWarning": false,
@@ -67,12 +56,16 @@
     "python.analysis.inlayHints.functionReturnTypes": true,
     "python.analysis.inlayHints.variableTypes": true,
     "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter",  // "ms-python.autopep8",
+        "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnType": true,
         "editor.formatOnSave": true,
+        "files.insertFinalNewline": true,
     },
-    "pylint.showNotifications": "onError",
-
+    // Make sure virtual environment is activated in terminal
+    "python.terminal.activateEnvironment": true,
+    "black-formatter.args": [
+        "--max-line-length=100"
+    ],
     "jupyter.contextualHelp.detailLevel": "verbose",
     "jupyter.notebookRunGroups.enabled": false,
     "jupyter.notebookRunGroups.groupCount": 3,
@@ -104,55 +97,41 @@
 
     // Fix whitespaces before saving to avoid spurrious diffs and to easier identify duplications
     "files.trimTrailingWhitespace": true,
-    "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,  // If more than one
-        "yaml.customTags": [
-            "!And",
-            "!And sequence",
-            "!If",
-            "!If sequence",
-            "!Not",
-            "!Not sequence",
-            "!Equals",
-            "!Equals sequence",
-            "!Or",
-            "!Or sequence",
-            "!FindInMap",
-            "!FindInMap sequence",
-            "!Base64",
-            "!Join",
-            "!Join sequence",
-            "!Cidr",
-            "!Ref",
-            "!Sub",
-            "!Sub sequence",
-            "!GetAtt",
-            "!GetAZs",
-            "!ImportValue",
-            "!ImportValue sequence",
-            "!Select",
-            "!Select sequence",
-            "!Split",
-            "!Split sequence"
-        ],
-        "redhat.telemetry.enabled": false,
-        "security.workspace.trust.untrustedFiles": "open",
-        "files.autoSave": "afterDelay",
-        "editor.inlineSuggest.enabled": true,
-        "workbench.colorTheme": "Visual Studio Light",
-        "git.openRepositoryInParentFolders": "always",
-		"diffEditor.ignoreTrimWhitespace": false,
-		"workbench.preferredLightColorTheme": "Visual Studio Light",
+    // Enabled only for Python, because in notebooks this added a newline to every cell (I did not find a way to create language-specific settings for notebooks only)
+    "files.insertFinalNewline": false,
 
-		"terraform.experimentalFeatures.validateOnSave": true,
-		"[terraform]": {
-			"editor.defaultFormatter": "hashicorp.terraform",
-			"editor.formatOnSave": true,
-			"editor.formatOnSaveMode": "file"
-		  },
-		  "[terraform-vars]": {
-			"editor.defaultFormatter": "hashicorp.terraform",
-			"editor.formatOnSave": true,
-			"editor.formatOnSaveMode": "file"
-		  }
-	}
+    "redhat.telemetry.enabled": false,
+    "security.workspace.trust.untrustedFiles": "open",
+    // "security.allowedUNCHosts": [
+    //     "wsl.localhost"
+    // ],
+    "files.autoSave": "afterDelay",
+    "editor.inlineSuggest.enabled": true,
+    "workbench.colorTheme": "Visual Studio Light",
+    "git.openRepositoryInParentFolders": "always",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "workbench.preferredLightColorTheme": "Visual Studio Light",
+
+    "terraform.experimentalFeatures.validateOnSave": true,
+    "[terraform]": {
+        "editor.defaultFormatter": "hashicorp.terraform",
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file"
+    },
+    "[terraform-vars]": {
+        "editor.defaultFormatter": "hashicorp.terraform",
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file"
+    },
+    "jupyter.askForKernelRestart": false,
+    "[json]": {
+        "editor.formatOnPaste": true,
+        "editor.formatOnSave": true,
+        "editor.quickSuggestions": {
+            "strings": true
+        },
+        "editor.suggest.insertMode": "replace"
+    },
+    "git.confirmSync": false,
+}
