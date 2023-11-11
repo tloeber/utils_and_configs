@@ -13,27 +13,6 @@
     debug:
       msg: "Running as user {{ ansible_user }}"
 
-  # Dotfiles
-  # ========
-  - name:  Copy dotfiles from this repo to user's home folder
-    copy:
-      src: ../shell-dotfiles/
-      remote_src: false  # Copy from control node
-      dest: "/home/{{ ansible_user }}/"
-      owner: "{{ ansible_user }}"
-      group: "{{ ansible_user }}"
-      mode: '0644'
-      backup: yes  # Will be in same directory as src file
-
-  - name: Copy scripts into folder in path
-    copy:
-      src: ../scripts
-      remote_src: false  # Copy from control node
-      dest: "/home/{{ ansible_user }}/.local/bin/"
-      owner: "{{ ansible_user }}"
-      group: "{{ ansible_user }}"
-      mode: '0644'
-
 
   # Folder structure
   # ================
@@ -61,6 +40,51 @@
       group: "{{ ansible_user }}"
       mode: '0755'
 
+
+  # Copy config files
+  # =================
+  # Shell
+  # -----
+  - name:  Copy shell dotfiles from this repo to user's home folder
+    copy:
+      src: ../shell-dotfiles/
+      remote_src: false  # Copy from control node
+      dest: "/home/{{ ansible_user }}/"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: '0644'
+      backup: yes  # Will be in same directory as src file
+
+  - name: Copy scripts into folder in path
+    copy:
+      src: ../scripts
+      remote_src: false  # Copy from control node
+      dest: "/home/{{ ansible_user }}/.local/bin/"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: '0644'
+
+  # Python
+  # ------
+  - name: Pylint config
+    copy:
+      src: ../python/.pylintrc
+      remote_src: false  # Copy from control node
+      dest: "/home/{{ ansible_user }}/"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: '0644'
+      backup: yes  # Will be in same directory as src file
+
+  - name: Mypy config
+    copy:
+      src: ../python/mypy.ini
+      remote_src: false  # Copy from control node
+      dest: "/home/{{ ansible_user }}/.config/mypy/"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: '0644'
+      backup: yes  # Will be in same directory as src file
 
   # Install Packages
   # ================
