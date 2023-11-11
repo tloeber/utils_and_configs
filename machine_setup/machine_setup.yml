@@ -73,11 +73,19 @@
       force_apt_get=yes  # Use apt, not aptitude
     no_log: true
 
-  - name: Update all packages to  latest version
+  - name: Update all APT packages to latest version
     apt:
       name: "*"
       state: latest
     no_log: true
+
+  - name: Get ASDF (used for installing Python and Terraform)
+    git:
+      repo: https://github.com/asdf-vm/asdf.git
+      dest: /home/{{ ansible_user }}/.local/bin/asdf
+      version: v0.13.1
+      update: false  # Don't update if repo has already been cloned
+    register: asdf_downloaded  # Whether repo has been cloned
 
 
   # Python
@@ -104,23 +112,16 @@
       state: latest
     no_log: true
 
-  - name: Get ASDF
-    git:
-      repo: https://github.com/asdf-vm/asdf.git
-      dest: /home/{{ ansible_user }}/.local/bin/asdf
-      version: v0.13.1
-      update: false  # Don't update if repo has already been cloned
-    register: asdf_downloaded  # Whether repo has been cloned
-
   - name: Install Python
     shell: |
       source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
       asdf plugin-add python
       asdf install python latest:3.11
       asdf global python latest:3.11
-    # when: asdf_downloaded.changed
+    when: asdf_downloaded.changed
     args:
       executable: /bin/bash
+
 
     # when: asdf_downloaded.changed
     # loop:
@@ -130,6 +131,28 @@
     #   # - "3.10"
     #   - "3.11"
     #   - "3.12"
+
+
+  # Terraform
+  # ---------
+
+  - name: Make sure Terraform is not install through APT
+    become: true
+    apt:
+      update_cache: yes
+      name:
+        - terraform
+      state: absent
+
+  - name: Install Terraform through ASDF
+    shell: |
+      source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
+      asdf plugin-add terraform https://github.com/asdf-community/asdf-hashicorp.git
+      asdf install terraform latest:1.6
+      asdf global terraform latest:1.6
+    args:
+      executable: /bin/bash
+
 
   # Docker
   # ------
@@ -236,43 +259,6 @@
     # Using the `update` flag so install does not fail in case it has been installed outside of Ansible.
     shell: bash /home/{{ ansible_user }}/bin/aws/install --update
     when: aws_cli_download.changed
-
-
-  # Terraform
-  # ---------
-  - name: Install Hashicorp GPG key
-    become: true
-    shell: >
-      wget -O- https://apt.releases.hashicorp.com/gpg
-      | gpg --dearmor
-      > /usr/share/keyrings/hashicorp-archive-keyring.gpg
-
-  - name: Verify key fingerprint
-    shell: >
-      gpg --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --list-keys
-      | grep -q {{ hashicorp_key_fingerprint }}
-    # Note that grep fails with rc=1 if no match is found
-    register: hashicorp_key_fingerprint_verified
-
-  - name: Get Ubuntu codename (for Hashicorp repository)
-    shell: lsb_release -cs
-    register: ubuntu_codename
-
-  - name: Install Hashicorp repository
-    apt_repository:
-      repo: >
-        deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg]
-          https://apt.releases.hashicorp.com {{ ubuntu_codename.stdout }} main
-      state: present
-    when: hashicorp_key_fingerprint_verified.rc == 0  # Just in case
-
-  - name: Install Terraform
-    become: true
-    apt:
-      update_cache: yes
-      name:
-        - terraform
-      state: latest
 
 
 # todo:

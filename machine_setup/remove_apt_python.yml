@@ -19,7 +19,7 @@
       # 3.8 is oldest version that still receives security support, as of Aug 2023. Remove Oct 2024.
       - "3.8"
       - "3.9"
-      # - "3.10"
+      # - "3.10"  # Leave this as system python
       - "3.11"
       - "3.12"
     register: apt_python_packages_removed
