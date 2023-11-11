@@ -82,44 +82,64 @@
 
   # Python
   # ------
-
-  # Convention is to use this repo, since apt does not have all current python versions
-  - name: Add Python repository from PPA and install its signing key on Ubuntu target
-    apt_repository:
-      repo: ppa:deadsnakes/ppa
-      state: present
-
-  - name: install all current versions of Python.
-    become: true
+  - name: Install prerequisites for compiling Python
     apt:
       name:
-        # See here how Python is broken up into multiple packages: https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa
-        # I.e., even DeadSnakes repo follows Debian's convention of having multiple packages for each Python version.
-        - "python{{ item }}-dev"
-        - "python{{ item }}-venv"
-        - "python{{ item }}-distutils"
-        ## To fix dependency issues (problems using pip/pipenv/pipinstall)
-        - "python3-six"
-        # https://gist.github.com/y56/0540d22a1db40dacc7fbbb93c866821e
-        - "python3-testresources"
+      - build-essential
+      - libssl-dev
+      - zlib1g-dev
+      - libbz2-dev
+      - libreadline-dev
+      - libsqlite3-dev
+      - wget
+      - curl
+      - llvm
+      - libncursesw5-dev
+      - xz-utils
+      - tk-dev
+      - libxml2-dev
+      - libxmlsec1-dev
+      - libffi-dev
+      - liblzma-dev
       state: latest
-    loop:
-      # 3.8 is oldest version that still receives security support, as of Aug 2023. Remove Oct 2024.
-      - "3.8"
-      - "3.9"
-      - "3.10"
-      - "3.11"
-      - "3.12"
+    no_log: true
+
+  - name: Get ASDF
+    git:
+      repo: https://github.com/asdf-vm/asdf.git
+      dest: /home/{{ ansible_user }}/.local/bin/asdf
+      version: v0.13.1
+      update: false  # Don't update if repo has already been cloned
+    register: asdf_downloaded  # Whether repo has been cloned
+
+  - name: Install Python
+    shell: |
+      source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
+      asdf plugin-add python
+      asdf install python latest:3.11
+      asdf global python latest:3.11
+    # when: asdf_downloaded.changed
+    args:
+      executable: /bin/bash
+
+    # when: asdf_downloaded.changed
+    # loop:
+    #   # 3.8 is oldest version that still receives security support, as of Aug 2023. Remove Oct 2024.
+    #   - "3.8"
+    #   - "3.9"
+    #   # - "3.10"
+    #   - "3.11"
+    #   - "3.12"
 
   # Docker
   # ------
   # See https://docs.docker.com/engine/install/ubuntu/
-  # Note that this is usually not necessary on WSL if you have Docker Desktop installed.
+  # Note that this is usually not necessary on WSL iff you have Docker Desktop installed.
   # However, this alternative can still be useful on WSL, since DocKer DesKtop is no longer
   # free for commercial usage in most cases.
 
   - name: Install docker's official GPG key
-    become:
+    become: true
     shell: >
       wget -O- https://download.docker.com/linux/ubuntu/gpg
       | gpg --dearmor
@@ -180,6 +200,7 @@
         - gnupg
         - software-properties-common
         - curl
+        - make
       state: latest
 
   - name: Remove dependencies no longer needed
@@ -256,6 +277,6 @@
 
 # todo:
 # - copy dotfiles (incl mypy, pylint, etc)
-# - Install python packages that should go into main environment: mypy, black, pipenv, poetry, pandas-stubs. Use  install --user pipenv ?
+# - Install python packages that should go into main environment: wheel, mypy, black, pipenv, poetry, pandas-stubs. Use  install --user? Pipenv? wheel?
 # - pip install --upgrade pip?
 # - pypy --install-types?
