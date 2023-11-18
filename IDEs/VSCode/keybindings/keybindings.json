@@ -558,7 +558,7 @@
     {
         "key": "ctrl+pagedown",
         "command": "workbench.action.nextEditor",
-        "when": "editorFocus"
+        "when": "! terminalFocus"
     },
     {
         "key": "ctrl+pagedown",
@@ -619,7 +619,7 @@
     {
         "key": "ctrl+pageup",
         "command": "workbench.action.previousEditor",
-        "when": "editorFocus"
+        "when": "! terminalFocus"
     },
     {
         "key": "ctrl+shift+d",
@@ -644,5 +644,29 @@
         "key": "ctrl+; a",
         "command": "-jupyter.insertCellAbove",
         "when": "editorTextFocus && jupyter.hascodecells && !jupyter.webExtension && !notebookEditorFocused"
+    },
+    {
+        "key": "ctrl+enter",
+        "command": "notebook.cell.quitEdit",
+        "when": "inputFocus && notebookEditorFocused && notebookCellType == 'markup'"
+    },
+    {
+        "key": "ctrl+alt+enter",
+        "command": "-notebook.cell.quitEdit",
+        "when": "inputFocus && notebookEditorFocused && notebookCellType == 'markup'"
+    },
+    {
+        "key": "ctrl+\\",
+        "command": "-workbench.action.splitEditor"
+    },
+    {
+        "key": "alt+]",
+        "command": "-editor.action.accessibleViewNext",
+        "when": "accessibleViewIsShown && accessibleViewSupportsNavigation"
+    },
+    {
+        "key": "alt+]",
+        "command": "-editor.action.inlineSuggest.showNext",
+        "when": "inlineSuggestionVisible && !editorReadonly"
     }
 ]

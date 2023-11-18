@@ -103,9 +103,6 @@
 
     "redhat.telemetry.enabled": false,
     "security.workspace.trust.untrustedFiles": "open",
-    // "security.allowedUNCHosts": [
-    //     "wsl.localhost"
-    // ],
     "files.autoSave": "afterDelay",
     "editor.inlineSuggest.enabled": true,
     "workbench.colorTheme": "Visual Studio Light",

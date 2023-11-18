@@ -150,7 +150,7 @@ fi
 
 
 # Environment variables
-export ENVIRONMENT="dev"
+export ENVIRONMENT="local"
 
 
 # Log
