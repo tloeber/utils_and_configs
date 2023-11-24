@@ -116,20 +116,6 @@ if ! shopt -oq posix; then
 fi
 
 
-# Path
-# ====
-
-# set PATH so it includes user's private bin
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-
-# set PATH so it includes user's private bin
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
-fi
-
-
 # Programs
 # ========
 # Tmux
@@ -139,18 +125,6 @@ fi
 #  HISTFILE=$HOME/.bash_history_tmux_${TMUX_PANE:1}
 #fi
 # HISTFILE=$HOME/.bash_history2
-
-
-# ASDF
-# ----
-# Run *after* setting PATH
-. "$HOME/.local/bin/asdf/asdf.sh"
-# Code completion
-. "$HOME/.local/bin/asdf/completions/asdf.bash"
-
-
-# Environment variables
-export ENVIRONMENT="local"
 
 
 # Log

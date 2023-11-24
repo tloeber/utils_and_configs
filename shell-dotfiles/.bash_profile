@@ -14,15 +14,44 @@ if [ -f "$HOME/.bashrc" ]; then
 fi
 
 
-# Environment variables
-# ---------------------
+# Path
+# ====
 
-# This file will *not* be sourced by IDEs to avoid polluting local dev env with any user settings.
-if [ -f ~/.env_login_shell ]; then
-    . ~/.env_login_shell
+# set PATH so it includes user's private bin
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+# set PATH so it includes user's private bin
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
 fi
 
 
-# Log
+# Configuration
+# =============
+# ASDF
+# ----
+# Run *after* setting PATH
+. "$HOME/.local/bin/asdf/asdf.sh"
+# Code completion
+. "$HOME/.local/bin/asdf/completions/asdf.bash"
+
+
+# Environment variables
+# =====================
+export ENVIRONMENT="local"
+
+# AWS
 # ---
+# https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
+export AWS_CLI_AUTO_PROMPT=off  # Need to override this if running aws cli commands in a script
+export AWS_PROFILE=default  # Set default profile
+# export AWS_RETRY_MODE=standard
+
+
+
+
+# Log
+# ===
 echo "Sourced .bash_profile"
