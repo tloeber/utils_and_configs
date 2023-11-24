@@ -3,6 +3,7 @@
 {
     "window.autoDetectColorScheme": true,
 
+    "workbench.colorTheme": "Visual Studio Light",
     "workbench.startupEditor": "newUntitledFile",
     "workbench.editorAssociations": {
         "*.ipynb": "jupyter-notebook"
@@ -73,6 +74,10 @@
     "notebook.showFoldingControls": "always",
     "notebook.lineNumbers": "on",
     "notebook.diff.ignoreMetadata": true,
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
 
     "[markdown]": {
         "editor.formatOnSave": true,
@@ -82,9 +87,11 @@
     // "vsintellicode.features.python.deepLearning": "enabled",  // deprecated?
 
     "git.autofetch": true,
+    "git.confirmSync": false,
     "git.ignoreWindowsGit27Warning": true,
     "git.suggestSmartCommit": false,
     "scm.defaultViewMode": "tree",  // How to group modified files in source control view
+    "githubPullRequests.createOnPublishBranch": "never",
     "gitlens.graph.dimMergeCommits": true,
     "gitlens.views.worktrees.files.layout": "list",
     "gitlens.views.branches.branches.layout": "list",
@@ -95,6 +102,8 @@
         "branch-create:command"
     ],
 
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
     // Fix whitespaces before saving to avoid spurrious diffs and to easier identify duplications
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,  // If more than one
@@ -103,11 +112,8 @@
 
     "redhat.telemetry.enabled": false,
     "security.workspace.trust.untrustedFiles": "open",
-    "files.autoSave": "afterDelay",
     "editor.inlineSuggest.enabled": true,
-    "workbench.colorTheme": "Visual Studio Light",
     "git.openRepositoryInParentFolders": "always",
-    "diffEditor.ignoreTrimWhitespace": false,
     "workbench.preferredLightColorTheme": "Visual Studio Light",
 
     "terraform.experimentalFeatures.validateOnSave": true,
@@ -130,5 +136,4 @@
         },
         "editor.suggest.insertMode": "replace"
     },
-    "git.confirmSync": false,
 }

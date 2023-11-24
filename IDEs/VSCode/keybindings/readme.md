@@ -64,3 +64,10 @@
 - Split Terminal horizontally:  (Same as Jupyter split cell?)
 - Go up/down: T + left/right?
 - Go left/right: (Same as next/prev. editor tab?)
+
+## Jupyter
+### Same as notebook in browser
+- Split cell at cursor: ctrl + shift + "-"
+
+
+## Custom

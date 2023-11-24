@@ -668,5 +668,10 @@
         "key": "alt+]",
         "command": "-editor.action.inlineSuggest.showNext",
         "when": "inlineSuggestionVisible && !editorReadonly"
+    },
+    {
+        "key": "alt+s",
+        "command": "jupyter-slideshow.switchSlideType",
+        "when": "notebookEditorFocused || notebookOutputFocused"
     }
 ]
