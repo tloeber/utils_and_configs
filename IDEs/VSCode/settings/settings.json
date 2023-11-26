@@ -95,6 +95,8 @@
     "gitlens.graph.dimMergeCommits": true,
     "gitlens.views.worktrees.files.layout": "list",
     "gitlens.views.branches.branches.layout": "list",
+    // Turning off because too often accidentally activated when trying to push (tab + enter), and Undo doesn't work
+    "gitlens.ai.experimental.generateCommitMessage.enabled": false,
     "gitlens.gitCommands.skipConfirmations": [
         "fetch:command",
         "stash-push:command",
