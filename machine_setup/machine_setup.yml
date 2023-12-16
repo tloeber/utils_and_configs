@@ -156,6 +156,25 @@
     #   - "3.11"
     #   - "3.12"
 
+  # Java
+  # ----
+  - name: Install dependencies
+    apt:
+      name:
+        - curl
+        - coreutils
+        - unzip
+        - jq
+
+  - name: Install Java
+    shell: |
+      source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
+      asdf plugin-add java
+      asdf install java latest:openjdk-11
+      asdf global java latest:openjdk-11
+    # when: asdf_downloaded.changed
+    args:
+      executable: /bin/bash
 
   # Terraform
   # ---------
@@ -248,6 +267,7 @@
         - software-properties-common
         - curl
         - make
+        - openjdk-11-jdk
       state: latest
 
   - name: Remove dependencies no longer needed
