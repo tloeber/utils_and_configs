@@ -3,9 +3,7 @@
   connection: "{{ connection | default('ssh') }}"  # So we can use 'local' for localhost
 
   vars:
-    # As of Aug 2023. See https://www.hashicorp.com/official-packaging-guide
-    hashicorp_key_fingerprint: 798AEC654E5C15428C8E42EEAA16FCBCA621E701
-
+    global_python_version: "3.11"  # Which version of Python ASDF should set as default
 
   tasks:
 
@@ -140,21 +138,24 @@
     shell: |
       source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
       asdf plugin-add python
-      asdf install python latest:3.11
-      asdf global python latest:3.11
-    when: asdf_downloaded.changed
+      asdf install python latest:{{ item }}
+    loop:
+      # 3.8 is oldest version that still receives security support, as of Aug 2023. Remove Oct 2024.
+      - "3.8"
+      - "3.9"
+      - "3.10"
+      - "3.11"
+      - "3.12"
     args:
       executable: /bin/bash
 
+  - name: Set default version for Python
+    shell: |
+      source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
+      asdf global python latest:{{ global_python_version }}
+    args:
+      executable: /bin/bash
 
-    # when: asdf_downloaded.changed
-    # loop:
-    #   # 3.8 is oldest version that still receives security support, as of Aug 2023. Remove Oct 2024.
-    #   - "3.8"
-    #   - "3.9"
-    #   # - "3.10"
-    #   - "3.11"
-    #   - "3.12"
 
   # Java
   # ----
