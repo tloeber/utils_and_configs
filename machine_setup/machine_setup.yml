@@ -1,15 +1,21 @@
 ---
 - hosts: all
   connection: "{{ connection | default('ssh') }}"  # So we can use 'local' for localhost
+  become_user: "{{ ansible_user}}"
 
   vars:
-    global_python_version: "3.11"  # Which version of Python ASDF should set as default
+    global_python_version: "3.10"  # Which version of Python ASDF should set as default
 
   tasks:
 
-  - name: Log username (should not be `root`)
+  - name: Log ansible user (should not be `root`)
     debug:
-      msg: "Running as user {{ ansible_user }}"
+      msg: "ansible user: {{ ansible_user }}"
+
+  - name: Log user (should not be `root`)
+    shell: echo $(whoami)
+    args:
+      executable: /bin/bash
 
 
   # Folder structure
@@ -33,6 +39,14 @@
   - name: Create config folder for user. Add mypy subfolder. Todo - Add others.
     file:
       path: /home/{{ ansible_user }}/.config/mypy/
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: '0755'
+
+  - name: Create shared folder for ASDF
+    file:
+      path: /home/{{ ansible_user }}/.asdf
       state: directory
       owner: "{{ ansible_user }}"
       group: "{{ ansible_user }}"
@@ -89,17 +103,20 @@
 
   - name: Update apt cache
     become: true
+    become_user: root
     apt:
       update_cache=yes
       cache_valid_time=3600
       force_apt_get=yes  # Use apt, not aptitude
-    no_log: true
+    # no_log: true
 
   - name: Update all APT packages to latest version
+    become: true
+    become_user: root
     apt:
       name: "*"
       state: latest
-    no_log: true
+    # no_log: true
 
   - name: Get ASDF (used for installing Python and Terraform)
     git:
@@ -134,13 +151,21 @@
       state: latest
     no_log: true
 
+  - name: Add ASDF plugin for python
+    shell: |
+      source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh &&
+      asdf plugin-add python
+    args:
+      executable: /bin/bash
+
   - name: Install Python
     shell: |
       source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
-      asdf plugin-add python
       asdf install python latest:{{ item }}
+      echo $(whoami)
     loop:
       # 3.8 is oldest version that still receives security support, as of Aug 2023. Remove Oct 2024.
+      - "3.7"
       - "3.8"
       - "3.9"
       - "3.10"
@@ -153,6 +178,7 @@
     shell: |
       source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
       asdf global python latest:{{ global_python_version }}
+      whoami
     args:
       executable: /bin/bash
 
@@ -182,6 +208,7 @@
 
   - name: Make sure Terraform is not install through APT
     become: true
+    become_user: root
     apt:
       update_cache: yes
       name:
@@ -207,6 +234,7 @@
 
   - name: Install docker's official GPG key
     become: true
+    become_user: root
     shell: >
       wget -O- https://download.docker.com/linux/ubuntu/gpg
       | gpg --dearmor
@@ -227,6 +255,7 @@
 
   - name: Uninstall *unofficial* Docker distribution from APT iff Docker repo was newly added
     become: true
+    become_user: root
     apt:
       name:
         - docker.io
@@ -241,6 +270,7 @@
 
   - name: Install docker
     become: true
+    become_user: root
     apt:
       update_cache: yes
       name:
@@ -253,6 +283,7 @@
 
   - name: Add default user to `docker` group, so we can use docker w/o sudo
     become: true
+    become_user: root
     user:
       name: "{{ ansible_user }}"
       groups: "{{ ansible_user }},docker"
@@ -261,6 +292,7 @@
   # ------------------
   - name: install other common packages from apt
     become: true
+    become_user: root
     apt:
       name:
         - unzip
@@ -285,6 +317,7 @@
   # -------
   - name: Make sure we don't have v1 of AWS CLI installed
     become: true
+    become_user: root
     apt:
       name:
         - awscli
@@ -301,6 +334,7 @@
 
   - name: Install AWS CLI v2, if it was downloaded
     become: true
+    become_user: root
     # Using the `update` flag so install does not fail in case it has been installed outside of Ansible.
     shell: bash /home/{{ ansible_user }}/bin/aws/install --update
     when: aws_cli_download.changed
