@@ -1,0 +1,6 @@
+- All current Python versions are installed through ASDF.
+  - For each version, additional packages to install into the base environment are defined in ~/.default-python-packages, which is also tracked in this folder. (It is copied to the right location by Ansible.)
+- The default version is the system's python version, though.
+- For any new project:
+  - first set the python version locally using `asdf local python 3.12.1`. Note: Version needs to include patch version. To list which exact versions you have installed, use `asdf list python`.
+  - Then create a virtual environment the usual way. This will use the local python version set earlier.
