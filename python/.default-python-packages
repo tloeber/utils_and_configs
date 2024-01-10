@@ -1,0 +1,5 @@
+# For ASDF
+# Put this file into ~/
+# todo: add to ansible setup
+pipenv
+poetry
