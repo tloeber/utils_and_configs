@@ -50,8 +50,6 @@ export AWS_PROFILE=default  # Set default profile
 # export AWS_RETRY_MODE=standard
 
 
-
-
 # Log
 # ===
 echo "Sourced .bash_profile"

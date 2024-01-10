@@ -1,7 +1,6 @@
 ---
 - hosts: all
   connection: "{{ connection | default('ssh') }}"  # So we can use 'local' for localhost
-  become_user: "{{ ansible_user}}"
 
   vars:
     global_python_version: "3.10"  # Which version of Python ASDF should set as default
@@ -103,7 +102,6 @@
 
   - name: Update apt cache
     become: true
-    become_user: root
     apt:
       update_cache=yes
       cache_valid_time=3600
@@ -112,7 +110,6 @@
 
   - name: Update all APT packages to latest version
     become: true
-    become_user: root
     apt:
       name: "*"
       state: latest
@@ -152,20 +149,24 @@
     no_log: true
 
   - name: Add ASDF plugin for python
+    become: true
+    become_user: "{{ ansible_user }}"
     shell: |
       source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh &&
       asdf plugin-add python
     args:
       executable: /bin/bash
 
+  # Todo: look into how to uninstall old minor versions, if installing newer one.
   - name: Install Python
+    become: true
+    become_user: "{{ ansible_user }}"
     shell: |
       source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
       asdf install python latest:{{ item }}
       echo $(whoami)
     loop:
       # 3.8 is oldest version that still receives security support, as of Aug 2023. Remove Oct 2024.
-      - "3.7"
       - "3.8"
       - "3.9"
       - "3.10"
@@ -175,10 +176,11 @@
       executable: /bin/bash
 
   - name: Set default version for Python
+    become: true
+    become_user: "{{ ansible_user }}"
     shell: |
       source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
-      asdf global python latest:{{ global_python_version }}
-      whoami
+      asdf global python system
     args:
       executable: /bin/bash
 
@@ -194,21 +196,22 @@
         - jq
 
   - name: Install Java
+    become: true
+    become_user: "{{ ansible_user }}"
     shell: |
       source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
       asdf plugin-add java
       asdf install java latest:openjdk-11
       asdf global java latest:openjdk-11
-    # when: asdf_downloaded.changed
     args:
       executable: /bin/bash
+
 
   # Terraform
   # ---------
 
   - name: Make sure Terraform is not install through APT
     become: true
-    become_user: root
     apt:
       update_cache: yes
       name:
@@ -216,6 +219,8 @@
       state: absent
 
   - name: Install Terraform through ASDF
+    become: true
+    become_user: "{{ ansible_user }}"
     shell: |
       source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
       asdf plugin-add terraform https://github.com/asdf-community/asdf-hashicorp.git
@@ -234,7 +239,6 @@
 
   - name: Install docker's official GPG key
     become: true
-    become_user: root
     shell: >
       wget -O- https://download.docker.com/linux/ubuntu/gpg
       | gpg --dearmor
@@ -255,7 +259,6 @@
 
   - name: Uninstall *unofficial* Docker distribution from APT iff Docker repo was newly added
     become: true
-    become_user: root
     apt:
       name:
         - docker.io
@@ -270,7 +273,6 @@
 
   - name: Install docker
     become: true
-    become_user: root
     apt:
       update_cache: yes
       name:
@@ -283,7 +285,6 @@
 
   - name: Add default user to `docker` group, so we can use docker w/o sudo
     become: true
-    become_user: root
     user:
       name: "{{ ansible_user }}"
       groups: "{{ ansible_user }},docker"
@@ -292,7 +293,6 @@
   # ------------------
   - name: install other common packages from apt
     become: true
-    become_user: root
     apt:
       name:
         - unzip
@@ -317,7 +317,6 @@
   # -------
   - name: Make sure we don't have v1 of AWS CLI installed
     become: true
-    become_user: root
     apt:
       name:
         - awscli
@@ -334,7 +333,6 @@
 
   - name: Install AWS CLI v2, if it was downloaded
     become: true
-    become_user: root
     # Using the `update` flag so install does not fail in case it has been installed outside of Ansible.
     shell: bash /home/{{ ansible_user }}/bin/aws/install --update
     when: aws_cli_download.changed
