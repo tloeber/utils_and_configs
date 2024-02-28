@@ -40,7 +40,11 @@ fi
 
 # Environment variables
 # =====================
+
+# Dev setup
+# ---------
 export ENVIRONMENT="local"
+export LOGURU_LEVEL="INFO"
 
 # AWS
 # ---
