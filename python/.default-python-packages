@@ -3,3 +3,5 @@
 # todo: add to ansible setup
 pipenv
 poetry
+black
+mypy
