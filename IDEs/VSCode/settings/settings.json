@@ -2,7 +2,6 @@
 // (Use version in repo to view diff.)
 {
     "window.autoDetectColorScheme": true,
-
     "workbench.colorTheme": "Visual Studio Light",
     "workbench.startupEditor": "newUntitledFile",
     "workbench.editorAssociations": {
@@ -11,12 +10,13 @@
     "workbench.tree.indent": 25,
     "workbench.panel.defaultLocation": "right",  // Terminal on the right, not bottom
 
-    "editor.rulers": [88, 100],
+    "editor.rulers": [100],
     "editor.renderWhitespace": "all",
     "editor.minimap.enabled": false,
     "editor.acceptSuggestionOnEnter": "on",
     "editor.accessibilitySupport": "off",
-
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 105,
     // Replace tabs with spaces by default, but detect indentation. Thus, for files were we want tabs instead (e.g., Makefiles), we only have to manually change
     // to tabs on initial file creation. The preferred solution would be to override this setting by language, but I did not find a way to do this for `make`.
     "editor.detectIndentation": true,
@@ -78,7 +78,8 @@
         "default": "right",
         "jupyter-notebook": "left"
     },
-
+    "notebook.output.wordWrap": true,
+    "notebook.output.textLineLimit": 40,
     "[markdown]": {
         "editor.formatOnSave": true,
         "editor.wordWrap": "on",
@@ -92,6 +93,7 @@
     "git.suggestSmartCommit": false,
     "scm.defaultViewMode": "tree",  // How to group modified files in source control view
     "githubPullRequests.createOnPublishBranch": "never",
+    "diffEditor.wordWrap": "on",
     "gitlens.graph.dimMergeCommits": true,
     "gitlens.views.worktrees.files.layout": "list",
     "gitlens.views.branches.branches.layout": "list",
@@ -103,15 +105,19 @@
         "switch:command",
         "branch-create:command"
     ],
-
     "files.autoSave": "afterDelay",
-    "files.autoSaveDelay": 1000,
+    "files.autoSaveDelay": 3000,  // So that auto-formatting doesn't strip whitespace before typing next word
+    "files.autoSaveWorkspaceFilesOnly": true,
     // Fix whitespaces before saving to avoid spurrious diffs and to easier identify duplications
     "files.trimTrailingWhitespace": true,
     "files.trimFinalNewlines": true,  // If more than one
     // Enabled only for Python, because in notebooks this added a newline to every cell (I did not find a way to create language-specific settings for notebooks only)
     "files.insertFinalNewline": false,
-
+    "files.watcherExclude": {
+        "**/.bloop": true,
+        "**/.metals": true,
+        "**/.ammonite": true
+    },
     "redhat.telemetry.enabled": false,
     "security.workspace.trust.untrustedFiles": "open",
     "editor.inlineSuggest.enabled": true,
@@ -119,6 +125,8 @@
     "workbench.preferredLightColorTheme": "Visual Studio Light",
 
     "terraform.experimentalFeatures.validateOnSave": true,
+    "terraform.experimentalFeatures.prefillRequiredFields": true,
+    "terraform.codelens.referenceCount": true,
     "[terraform]": {
         "editor.defaultFormatter": "hashicorp.terraform",
         "editor.formatOnSave": true,
@@ -130,6 +138,7 @@
         "editor.formatOnSaveMode": "file"
     },
     "jupyter.askForKernelRestart": false,
+
     "[json]": {
         "editor.formatOnPaste": true,
         "editor.formatOnSave": true,
@@ -138,4 +147,6 @@
         },
         "editor.suggest.insertMode": "replace"
     },
+    "remote.autoForwardPortsSource": "hybrid",
+    "window.zoomLevel": -1,
 }
