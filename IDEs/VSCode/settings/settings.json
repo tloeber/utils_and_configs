@@ -3,6 +3,7 @@
 {
     "window.autoDetectColorScheme": true,
     "workbench.colorTheme": "Visual Studio Light",
+    "workbench.preferredLightColorTheme": "Visual Studio Light",
     "workbench.startupEditor": "newUntitledFile",
     "workbench.editorAssociations": {
         "*.ipynb": "jupyter-notebook"
@@ -17,10 +18,12 @@
     "editor.accessibilitySupport": "off",
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 105,
-    // Replace tabs with spaces by default, but detect indentation. Thus, for files were we want tabs instead (e.g., Makefiles), we only have to manually change
+    // Replace tabs with spaces by default, but detect indentation. Thus, for files where we want tabs instead (e.g., Makefiles), we only have to manually change
     // to tabs on initial file creation. The preferred solution would be to override this setting by language, but I did not find a way to do this for `make`.
     "editor.detectIndentation": true,
+    // Use spaces instead of tabs
     "editor.insertSpaces": true,
+    "editor.inlineSuggest.enabled": true,
 
     // For projects where conda is used, make this the default shell in workspace settings.
     // Todo: create template and start tracking it in git
@@ -50,27 +53,31 @@
     "terminal.integrated.defaultProfile.windows": "Git Bash",
     "terminal.integrated.defaultProfile.osx": "bash",
     "terminal.integrated.enableMultiLinePasteWarning": false,
-    "terminal.integrated.inheritEnv": true,  // New shells inherit env from VSCode. (No effect on Windows)
+    // New shells inherit env from VSCode. (No effect on Windows)
+    "terminal.integrated.inheritEnv": true,
 
     "python.languageServer": "Pylance",
     "python.analysis.typeCheckingMode": "basic",
+    // Show inlay type hints, where not explicilty defined
     "python.analysis.inlayHints.functionReturnTypes": true,
     "python.analysis.inlayHints.variableTypes": true,
     "[python]": {
+        // Auto formatting on save using black
         "editor.defaultFormatter": "ms-python.black-formatter",
-        "editor.formatOnType": true,
+        "editor.formatOnType": false,
         "editor.formatOnSave": true,
         "files.insertFinalNewline": true,
+        "black-formatter.args": [
+            "--max-line-length=100"
+        ],
     },
-    // Make sure virtual environment is activated in terminal
+    // Activate virtual environment in integrated terminal
     "python.terminal.activateEnvironment": true,
-    "black-formatter.args": [
-        "--max-line-length=100"
-    ],
     "jupyter.contextualHelp.detailLevel": "verbose",
     "jupyter.notebookRunGroups.enabled": false,
     "jupyter.notebookRunGroups.groupCount": 3,
     "jupyter.debugJustMyCode": false,
+    "jupyter.askForKernelRestart": false,
     "notebook.showFoldingControls": "always",
     "notebook.lineNumbers": "on",
     "notebook.diff.ignoreMetadata": true,
@@ -85,12 +92,13 @@
         "editor.wordWrap": "on",
     },
 
-    // "vsintellicode.features.python.deepLearning": "enabled",  // deprecated?
+    "vsintellicode.features.python.deepLearning": "enabled",  // deprecated?
 
     "git.autofetch": true,
     "git.confirmSync": false,
     "git.ignoreWindowsGit27Warning": true,
     "git.suggestSmartCommit": false,
+    "git.openRepositoryInParentFolders": "always",
     "scm.defaultViewMode": "tree",  // How to group modified files in source control view
     "githubPullRequests.createOnPublishBranch": "never",
     "diffEditor.wordWrap": "on",
@@ -105,6 +113,7 @@
         "switch:command",
         "branch-create:command"
     ],
+
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 3000,  // So that auto-formatting doesn't strip whitespace before typing next word
     "files.autoSaveWorkspaceFilesOnly": true,
@@ -118,11 +127,7 @@
         "**/.metals": true,
         "**/.ammonite": true
     },
-    "redhat.telemetry.enabled": false,
     "security.workspace.trust.untrustedFiles": "open",
-    "editor.inlineSuggest.enabled": true,
-    "git.openRepositoryInParentFolders": "always",
-    "workbench.preferredLightColorTheme": "Visual Studio Light",
 
     "terraform.experimentalFeatures.validateOnSave": true,
     "terraform.experimentalFeatures.prefillRequiredFields": true,
@@ -137,7 +142,6 @@
         "editor.formatOnSave": true,
         "editor.formatOnSaveMode": "file"
     },
-    "jupyter.askForKernelRestart": false,
 
     "[json]": {
         "editor.formatOnPaste": true,
@@ -147,6 +151,7 @@
         },
         "editor.suggest.insertMode": "replace"
     },
+
     "remote.autoForwardPortsSource": "hybrid",
     "window.zoomLevel": -1,
 }
