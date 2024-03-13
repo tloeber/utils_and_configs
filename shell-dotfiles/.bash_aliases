@@ -75,7 +75,24 @@ function mc {
    mkdir $1 && cd $1
 }
 
+# Terraform
+# =========
+
 alias tf="terraform"
+alias tfa="terraform apply"
+alias tfaa="terraform apply -auto-approve"
+
+alias tfw="terraform workspace"
+alias tfws="terraform workspace select"
+alias tfwn="terraform workspace new"
+alias tfwl="terraform workspace list"
+
+alias tfi="terraform import"
+
+
+# Databricks
+# ===========
+alias db="databricks"
 
 
 ## Custom functions
