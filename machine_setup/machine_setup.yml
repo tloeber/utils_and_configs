@@ -301,6 +301,7 @@
         - curl
         - make
         - openjdk-11-jdk
+        - gh # github cli
       state: latest
 
   - name: Remove dependencies no longer needed
@@ -336,6 +337,14 @@
     # Using the `update` flag so install does not fail in case it has been installed outside of Ansible.
     shell: bash /home/{{ ansible_user }}/bin/aws/install --update
     when: aws_cli_download.changed
+
+
+  # Databricks CLI
+  # --------------
+  - name: Install /databricks CLI, if it doesn't exist
+    become: true
+    # Using the `update` flag so install does not fail in case it has been installed outside of Ansible.
+    shell: databricks -v || ( curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh )
 
 
 # todo:
