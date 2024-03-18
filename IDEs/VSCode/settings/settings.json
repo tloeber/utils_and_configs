@@ -122,11 +122,30 @@
     "files.trimFinalNewlines": true,  // If more than one
     // Enabled only for Python, because in notebooks this added a newline to every cell (I did not find a way to create language-specific settings for notebooks only)
     "files.insertFinalNewline": false,
+
+    // Files to exclude from search
+    "search.exclude": {
+        // Python virtual envs and other binaries in project dir
+        "**/bin/": true
+    },
+    // Files to exclude from file explorer
+    "files.exclude": {
+        // Python virtual envs and other binaries in project dir
+        "**/bin/": true,
+        // Terraform. Note that glob expressions are more complicated than they should be (as `**` should
+        // match any character incl `\`), but it didn't work otherwise. Presumably a bug in VSCode.
+        "**/.terraform": true,
+        "**/.terraform.*": true,
+        "**/*.tfstate": true,
+        "**/*.tfstate.*": true
+    },
     "files.watcherExclude": {
+        // Scala
         "**/.bloop": true,
         "**/.metals": true,
         "**/.ammonite": true
     },
+
     "security.workspace.trust.untrustedFiles": "open",
 
     "terraform.experimentalFeatures.validateOnSave": true,

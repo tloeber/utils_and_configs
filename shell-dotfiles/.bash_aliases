@@ -75,10 +75,13 @@ function mc {
    mkdir $1 && cd $1
 }
 
+
 # Terraform
 # =========
 
 alias tf="terraform"
+alias tfl="terraform login"
+alias tfp="terraform plan"
 alias tfa="terraform apply"
 alias tfaa="terraform apply -auto-approve"
 
