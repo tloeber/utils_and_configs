@@ -53,6 +53,19 @@ export AWS_CLI_AUTO_PROMPT=off  # Need to override this if running aws cli comma
 export AWS_PROFILE=default  # Set default profile
 # export AWS_RETRY_MODE=standard
 
+# Secrets
+# -------
+if [ -f "$HOME/.secrets" ]; then
+    # Automatically export all variables defined.
+    set -a
+
+    # Source env file with secrets
+    . "$HOME/.secrets"
+    echo "Sourced ~/.secrets"
+
+    # Turn off automatic export again
+    set +a
+fi
 
 # Log
 # ===
