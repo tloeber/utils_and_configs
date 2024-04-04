@@ -115,14 +115,21 @@
       state: latest
     # no_log: true
 
-  - name: Get ASDF (used for installing Python and Terraform)
+  - name: Download ASDF package manager
     git:
       repo: https://github.com/asdf-vm/asdf.git
       dest: /home/{{ ansible_user }}/.local/bin/asdf
-      version: v0.13.1
-      update: false  # Don't update if repo has already been cloned
-    register: asdf_downloaded  # Whether repo has been cloned
+      version: HEAD #  Latest *release* (Looks like master is only updated when there is a release.)
+      update: true  # Update repo if it has already been cloned
+    register: asdf_downloaded_or_updated  # Whether repo has been cloned
 
+  - name: Install (or update) ASDF
+    become: true
+    become_user: "{{ ansible_user }}"
+    shell: source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
+    args:
+      executable: /bin/bash
+    when: asdf_downloaded_or_updated == true
 
   # Python
   # ------
@@ -157,16 +164,27 @@
     args:
       executable: /bin/bash
 
-  # Todo: look into how to uninstall old minor versions, if installing newer one.
   - name: Install Python
     become: true
     become_user: "{{ ansible_user }}"
     shell: |
+      set -eu
       source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
-      asdf install python latest:{{ item }}
-      echo $(whoami)
+      # Get *latest available* *patch* (i.e., full) version of a given minor version.
+      LATEST_VERSION=$( asdf latest python {{ item }} )
+      # Install that version. (This will be automatically skipped if it already exists.)
+      asdf install python $LATEST_VERSION
+
+      # Uninstall all other versions of this minor version
+      INSTALLED_VERSIONS=$( asdf list python {{ item }} )
+      for VERSION in $INSTALLED_VERSIONS; do
+        if [ "$VERSION" != "$LATEST_VERSION" ]; then
+          echo "Uninstalling python $VERSION, as the latest available version is $LATEST_VERSION."
+          asdf uninstall python $VERSION
+        fi
+      done
     loop:
-      # 3.8 is oldest version that still receives security support, as of Aug 2023. Remove Oct 2024.
+      # 3.8 is oldest version that still receives security support. Remove Oct 2024.
       - "3.8"
       - "3.9"
       - "3.10"
@@ -181,6 +199,7 @@
     shell: |
       source /home/{{ ansible_user }}/.local/bin/asdf/asdf.sh
       asdf global python system
+      echo "Available Python versions: $(asdf list python)"
     args:
       executable: /bin/bash
 
