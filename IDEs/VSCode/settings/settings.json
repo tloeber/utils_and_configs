@@ -25,6 +25,18 @@
     "editor.insertSpaces": true,
     "editor.inlineSuggest.enabled": true,
 
+    // Terminal
+    // --------
+    // Use *login* shell
+    "terminal.integrated.profiles.linux": {
+        "BashLoginShell": {
+            "path": "bash",
+            "args": ["-l"]
+        }
+    },
+    "terminal.integrated.defaultProfile.linux": "BashLoginShell",
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "terminal.integrated.defaultProfile.osx": "bash",
     // For projects where conda is used, make this the default shell in workspace settings.
     // Todo: create template and start tracking it in git
     "terminal.integrated.profiles.linux": {
@@ -53,8 +65,10 @@
     "terminal.integrated.defaultProfile.windows": "Git Bash",
     "terminal.integrated.defaultProfile.osx": "bash",
     "terminal.integrated.enableMultiLinePasteWarning": false,
-    // New shells inherit env from VSCode. (No effect on Windows)
-    "terminal.integrated.inheritEnv": true,
+    "terminal.integrated.inheritEnv": true,  // New shells inherit env from VSCode. (No effect on Windows)
+
+    // Python
+    // -------
 
     "python.languageServer": "Pylance",
     "python.analysis.typeCheckingMode": "basic",
@@ -173,4 +187,23 @@
 
     "remote.autoForwardPortsSource": "hybrid",
     "window.zoomLevel": -1,
+    "yaml.format.printWidth": 105,
+    "html.format.wrapLineLength": 105,
+    // Files to exclude from search
+    "search.exclude": {
+        // Python virtual envs and other binaries in project dir
+        "**/bin/": true
+    },
+    // Files to exclude from file explorer
+    "files.exclude": {
+        // Python virtual envs and other binaries in project dir
+        "**/bin/": true,
+        // Terraform. Note that glob expressions are more complicated than they should be (as `**` should
+        // match any character incl `\`), but it didn't work otherwise. Presumably a bug in VSCode.
+        "**/.terraform": true,
+        "**/.terraform.*": true,
+        "**/*.tfstate": true,
+        "**/*.tfstate.*": true
+    },
+    "json.format.enable": false,
 }
