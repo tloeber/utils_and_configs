@@ -366,6 +366,22 @@
     shell: databricks -v || ( curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh )
 
 
+  # Autoenv
+  # -------
+  - name: Install autoenv
+    git:
+      repo: https://github.com/hyperupcall/autoenv
+      dest: /home/{{ ansible_user }}/.autoenv
+      version: HEAD #  Latest *release* (Looks like master is only updated when there is a release.)
+      update: true  # Update repo if it has already been cloned
+    register: autoenv_changed  # Whether repo has been cloned
+
+  - name: Log change
+    debug:
+      msg: "Autoenv was updated."
+    when: autoenv_changed == true
+
+
 # todo:
 # - copy dotfiles (incl mypy, pylint, etc)
 # - Install python packages that should go into main environment: wheel, mypy, black, pipenv, poetry, pandas-stubs. Use  install --user? Pipenv? wheel?

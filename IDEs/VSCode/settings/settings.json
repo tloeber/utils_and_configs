@@ -1,9 +1,21 @@
-// Edit *hard-linked* version of this file using VSCode to get validation as well as documentation when hovering over keys.
-// (Use version in repo to view diff.)
+// Locations on Windows:
+// =====================
+// - %HOME%/AppData/Roaming/Code/User/: Edit this for system-wide configurations (incl WSL)
+// - $HOME/.vscode-server/data/Machine/: WSL-wide configs. Gererally only set `workbench.colorTheme` to distinguish WSL from Windows.
+// - ./vscode/: Workspace- and folder-specific settings. (Note that not all settings are available at folder level)
+
+// How to edit:
+// ============
+// - Edit original version of this file using VSCode to get validation as well as documentation when hovering over keys.
+// - Use version in repo to view diff.
+
+
 {
-    "window.autoDetectColorScheme": true,
-    "workbench.colorTheme": "Visual Studio Light",
+    // Looks
+    // =====
+
     "workbench.preferredLightColorTheme": "Visual Studio Light",
+    "workbench.colorTheme": "Visual Studio Light",
     "workbench.startupEditor": "newUntitledFile",
     "workbench.editorAssociations": {
         "*.ipynb": "jupyter-notebook"
@@ -11,6 +23,13 @@
     "workbench.tree.indent": 25,
     "workbench.panel.defaultLocation": "right",  // Terminal on the right, not bottom
 
+    "window.autoDetectColorScheme": true,
+
+
+    //  Editor
+    // =======
+
+    "editor.inlineSuggest.enabled": true,
     "editor.rulers": [100],
     "editor.renderWhitespace": "all",
     "editor.minimap.enabled": false,
@@ -18,15 +37,50 @@
     "editor.accessibilitySupport": "off",
     "editor.wordWrap": "wordWrapColumn",
     "editor.wordWrapColumn": 105,
-    // Replace tabs with spaces by default, but detect indentation. Thus, for files where we want tabs instead (e.g., Makefiles), we only have to manually change
+    // Replace tabs with spaces by default, but detect indentation. Thus, for files were we want tabs instead (e.g., Makefiles), we only have to manually change
     // to tabs on initial file creation. The preferred solution would be to override this setting by language, but I did not find a way to do this for `make`.
     "editor.detectIndentation": true,
-    // Use spaces instead of tabs
     "editor.insertSpaces": true,
-    "editor.inlineSuggest.enabled": true,
+
+
+    //  Files
+    // ======
+
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 3000,  // So that auto-formatting doesn't strip whitespace before typing next word
+    "files.autoSaveWorkspaceFilesOnly": true,
+    // Fix whitespaces before saving to avoid spurrious diffs and to easier identify duplications
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,  // If more than one
+    // Enabled only for Python, because in notebooks this added a newline to every cell (I did not find a way to create language-specific settings for notebooks only)
+    "files.insertFinalNewline": false,
+    "files.watcherExclude": {
+        "**/.bloop": true,
+        "**/.metals": true,
+        "**/.ammonite": true
+    },
+    // Files to exclude from file explorer
+    "files.exclude": {
+        // Python virtual envs and other binaries in project dir
+        "**/bin/": true,
+        // Terraform. Note that glob expressions are more complicated than they should be (as `**` should
+        // match any character incl `\`), but it didn't work otherwise. Presumably a bug in VSCode.
+        "**/.terraform": true,
+        "**/.terraform.*": true,
+        "**/*.tfstate": true,
+        "**/*.tfstate.*": true
+    },
+
+    // Files to exclude from search
+    "search.exclude": {
+        // Python virtual envs and other binaries in project dir
+        "**/bin/": true
+    },
+
 
     // Terminal
-    // --------
+    // ========
+
     // Use *login* shell
     "terminal.integrated.profiles.linux": {
         "BashLoginShell": {
@@ -60,38 +114,38 @@
             ]
         },
     },
-    // Default profile does not have conda initialized to prevent interference with standard Python
-    "terminal.integrated.defaultProfile.linux": "bash",
-    "terminal.integrated.defaultProfile.windows": "Git Bash",
-    "terminal.integrated.defaultProfile.osx": "bash",
     "terminal.integrated.enableMultiLinePasteWarning": false,
     "terminal.integrated.inheritEnv": true,  // New shells inherit env from VSCode. (No effect on Windows)
 
-    // Python
-    // -------
 
+    // Language-specific settings
+    // ==========================
+
+    // Python
+    // ------
+
+    // Make sure virtual environment is activated in terminal
+    "python.terminal.activateEnvironment": true,
     "python.languageServer": "Pylance",
     "python.analysis.typeCheckingMode": "basic",
-    // Show inlay type hints, where not explicilty defined
     "python.analysis.inlayHints.functionReturnTypes": true,
     "python.analysis.inlayHints.variableTypes": true,
     "[python]": {
-        // Auto formatting on save using black
         "editor.defaultFormatter": "ms-python.black-formatter",
-        "editor.formatOnType": false,
+        "editor.formatOnType": true,
         "editor.formatOnSave": true,
         "files.insertFinalNewline": true,
-        "black-formatter.args": [
-            "--max-line-length=100"
-        ],
     },
-    // Activate virtual environment in integrated terminal
-    "python.terminal.activateEnvironment": true,
+
+    "black-formatter.args": [
+        "--max-line-length=100"
+    ],
+
     "jupyter.contextualHelp.detailLevel": "verbose",
     "jupyter.notebookRunGroups.enabled": false,
     "jupyter.notebookRunGroups.groupCount": 3,
     "jupyter.debugJustMyCode": false,
-    "jupyter.askForKernelRestart": false,
+
     "notebook.showFoldingControls": "always",
     "notebook.lineNumbers": "on",
     "notebook.diff.ignoreMetadata": true,
@@ -101,66 +155,10 @@
     },
     "notebook.output.wordWrap": true,
     "notebook.output.textLineLimit": 40,
-    "[markdown]": {
-        "editor.formatOnSave": true,
-        "editor.wordWrap": "on",
-    },
 
-    "vsintellicode.features.python.deepLearning": "enabled",  // deprecated?
 
-    "git.autofetch": true,
-    "git.confirmSync": false,
-    "git.ignoreWindowsGit27Warning": true,
-    "git.suggestSmartCommit": false,
-    "git.openRepositoryInParentFolders": "always",
-    "scm.defaultViewMode": "tree",  // How to group modified files in source control view
-    "githubPullRequests.createOnPublishBranch": "never",
-    "diffEditor.wordWrap": "on",
-    "gitlens.graph.dimMergeCommits": true,
-    "gitlens.views.worktrees.files.layout": "list",
-    "gitlens.views.branches.branches.layout": "list",
-    // Turning off because too often accidentally activated when trying to push (tab + enter), and Undo doesn't work
-    "gitlens.ai.experimental.generateCommitMessage.enabled": false,
-    "gitlens.gitCommands.skipConfirmations": [
-        "fetch:command",
-        "stash-push:command",
-        "switch:command",
-        "branch-create:command"
-    ],
-
-    "files.autoSave": "afterDelay",
-    "files.autoSaveDelay": 3000,  // So that auto-formatting doesn't strip whitespace before typing next word
-    "files.autoSaveWorkspaceFilesOnly": true,
-    // Fix whitespaces before saving to avoid spurrious diffs and to easier identify duplications
-    "files.trimTrailingWhitespace": true,
-    "files.trimFinalNewlines": true,  // If more than one
-    // Enabled only for Python, because in notebooks this added a newline to every cell (I did not find a way to create language-specific settings for notebooks only)
-    "files.insertFinalNewline": false,
-
-    // Files to exclude from search
-    "search.exclude": {
-        // Python virtual envs and other binaries in project dir
-        "**/bin/": true
-    },
-    // Files to exclude from file explorer
-    "files.exclude": {
-        // Python virtual envs and other binaries in project dir
-        "**/bin/": true,
-        // Terraform. Note that glob expressions are more complicated than they should be (as `**` should
-        // match any character incl `\`), but it didn't work otherwise. Presumably a bug in VSCode.
-        "**/.terraform": true,
-        "**/.terraform.*": true,
-        "**/*.tfstate": true,
-        "**/*.tfstate.*": true
-    },
-    "files.watcherExclude": {
-        // Scala
-        "**/.bloop": true,
-        "**/.metals": true,
-        "**/.ammonite": true
-    },
-
-    "security.workspace.trust.untrustedFiles": "open",
+    // Terraform
+    // ----------
 
     "terraform.experimentalFeatures.validateOnSave": true,
     "terraform.experimentalFeatures.prefillRequiredFields": true,
@@ -175,6 +173,12 @@
         "editor.formatOnSave": true,
         "editor.formatOnSaveMode": "file"
     },
+    "jupyter.askForKernelRestart": false,
+
+    // JSON
+    // -----
+
+    "json.format.enable": false,
 
     "[json]": {
         "editor.formatOnPaste": true,
@@ -185,25 +189,51 @@
         "editor.suggest.insertMode": "replace"
     },
 
-    "remote.autoForwardPortsSource": "hybrid",
-    "window.zoomLevel": -1,
+
+    // Other filetypes
+    // ---------------
     "yaml.format.printWidth": 105,
     "html.format.wrapLineLength": 105,
-    // Files to exclude from search
-    "search.exclude": {
-        // Python virtual envs and other binaries in project dir
-        "**/bin/": true
+    "[markdown]": {
+        "editor.formatOnSave": true,
+        "editor.wordWrap": "on",
     },
-    // Files to exclude from file explorer
-    "files.exclude": {
-        // Python virtual envs and other binaries in project dir
-        "**/bin/": true,
-        // Terraform. Note that glob expressions are more complicated than they should be (as `**` should
-        // match any character incl `\`), but it didn't work otherwise. Presumably a bug in VSCode.
-        "**/.terraform": true,
-        "**/.terraform.*": true,
-        "**/*.tfstate": true,
-        "**/*.tfstate.*": true
-    },
-    "json.format.enable": false,
+
+
+    // Git
+    // ====
+
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "git.ignoreWindowsGit27Warning": true,
+    "git.suggestSmartCommit": false,
+    "git.openRepositoryInParentFolders": "always",
+
+    "gitlens.graph.dimMergeCommits": true,
+    "gitlens.views.worktrees.files.layout": "list",
+    "gitlens.views.branches.branches.layout": "list",
+    // Turning off because too often accidentally activated when trying to push (tab + enter), and Undo doesn't work
+    "gitlens.ai.experimental.generateCommitMessage.enabled": false,
+    "gitlens.gitCommands.skipConfirmations": [
+        "fetch:command",
+        "stash-push:command",
+        "switch:command",
+        "branch-create:command"
+    ],
+
+    "scm.defaultViewMode": "tree",  // How to group modified files in source control view
+    "githubPullRequests.createOnPublishBranch": "never",
+    "diffEditor.wordWrap": "on",
+
+
+    // Misc
+    // =====
+    "remote.autoForwardPortsSource": "hybrid",
+    "redhat.telemetry.enabled": false,
+    "security.workspace.trust.untrustedFiles": "open",
+
+
+    // New / Uncategorized
+    // ====================
+
 }
