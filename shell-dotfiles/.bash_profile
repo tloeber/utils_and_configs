@@ -1,5 +1,5 @@
 # ==============================================================================
-# This file is loaded for both login and non-login bash shells.
+# This file is loaded for *login* bash shells.
 #
 # Put **profile setup** in this file, such as setting path or environment variables.
 # Note that these changes will not apply to sh; but since there are only few
@@ -8,7 +8,11 @@
 # compatible with non-bash shells.
 # ==============================================================================
 
-# Make sure .bashrc is also read by a LOGIN shell.
+
+# Source .bashrc
+# ==============
+
+# Otherwise, bashrc is only read by *non*-login shell
 if [ -f "$HOME/.bashrc" ]; then
 . "$HOME/.bashrc"
 fi
@@ -30,6 +34,7 @@ fi
 
 # Configuration
 # =============
+
 # ASDF
 # ----
 # Run *after* setting PATH
@@ -37,9 +42,13 @@ fi
 # Code completion
 . "$HOME/.local/bin/asdf/completions/asdf.bash"
 
+# Autoenv
+# -------
+source ~/.autoenv/activate.sh
 
-# Environment variables
-# =====================
+
+# Set environment variables
+# =========================
 
 # Dev setup
 # ---------
@@ -66,6 +75,7 @@ if [ -f "$HOME/.secrets" ]; then
     # Turn off automatic export again
     set +a
 fi
+
 
 # Log
 # ===

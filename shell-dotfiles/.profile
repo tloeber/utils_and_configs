@@ -8,7 +8,6 @@
 #umask 022
 
 
-
 # My own modifications
 # ====================
 echo "Sourced .profile"
