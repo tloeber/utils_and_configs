@@ -81,19 +81,16 @@
     // Terminal
     // ========
 
-    // Use *login* shell
+    // Linux
+    // -----
     "terminal.integrated.profiles.linux": {
+        // Use *login* shell
         "BashLoginShell": {
             "path": "bash",
             "args": ["-l"]
-        }
-    },
-    "terminal.integrated.defaultProfile.linux": "BashLoginShell",
-    "terminal.integrated.defaultProfile.windows": "Git Bash",
-    "terminal.integrated.defaultProfile.osx": "bash",
-    // For projects where conda is used, make this the default shell in workspace settings.
-    // Todo: create template and start tracking it in git
-    "terminal.integrated.profiles.linux": {
+        },
+        // For projects where conda is used, make this the default shell in *workspace* settings.
+        // Note: Init file may need to be tweaked, haven't used it in a while
         "BashWithConda": {
             "path": "bash",
             "args": [
@@ -102,6 +99,10 @@
             ]
         }
     },
+    "terminal.integrated.defaultProfile.linux": "BashLoginShell",
+
+    // Windows
+    // -------
     "terminal.integrated.profiles.windows": {
         "Git Bash": {
             "source": "Git Bash"
@@ -114,6 +115,14 @@
             ]
         },
     },
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+
+    // Mac
+    // ---
+    "terminal.integrated.defaultProfile.osx": "bash",
+
+    // Other settings
+    // --------------
     "terminal.integrated.enableMultiLinePasteWarning": false,
     "terminal.integrated.inheritEnv": true,  // New shells inherit env from VSCode. (No effect on Windows)
 
