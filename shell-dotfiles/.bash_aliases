@@ -26,13 +26,18 @@ alias dcu="docker compose up"
 alias dcr="docker compose restart"
 alias dcd="docker compose down"
 
-
 # dcr()
 # Usage: dls '-it alpine sh'
 #{	docker container run $1}
 
 # Other
 alias dl="pass dockerhub_token | docker login -u loebert --password-stdin"
+
+
+# Kubernetes
+# ==========
+
+alias k="kubectl"
 
 
 ## tmux
