@@ -5,7 +5,7 @@
 ## login shell
 
 - First: /etc/profile (if that file exists)
-- Looks for ~/.bash_profile, ~/.bash_login, and ~/.profile, in that order, andsources first one that exists and is readable.
+- Looks for ~/.bash_profile, ~/.bash_login, and ~/.profile, in that order, and sources first one that exists and is readable.
 - **Typically ~/.bash_profile manually sources .bashrc,**
 - Custom behavior:
   - can also enable this for non-interactive shell with the --login option,
