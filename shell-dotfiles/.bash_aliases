@@ -51,23 +51,24 @@ alias ta="tmux attach -t"
 ## Git
 ## ===
 
-alias gs="git status"
-alias gc="git commit"
-alias gcm="git commit -m"
-alias gl="git log"
-alias glo="git log --oneline"
-alias glg="git log --graph --oneline --decorate --all"
-alias gd="git diff"
-alias ga="git add"
-alias gb="git branch"
-alias gr="git remote"
-alias gpush="git push"
-alias gpull="git pull"
-alias gm="git move"
-# Add *one or more* file and commit
-function gac {
-  git add "$@" && git commit
-}
+alias gpf="git push --force"
+alias gmv="git move"
+# alias gs="git status"
+# alias gc="git commit"
+# alias gcm="git commit -m"
+# alias gl="git log"
+# alias glo="git log --oneline"
+# alias glg="git log --graph --oneline --decorate --all"
+# alias gd="git diff"
+# alias ga="git add"
+# alias gb="git branch"
+# alias gr="git remote"
+# alias gpush="git push"
+# alias gpull="git pull"
+# # Add *one or more* file and commit
+# function gac {
+#   git add "$@" && git commit
+# }
 
 
 ## other
