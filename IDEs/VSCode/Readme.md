@@ -20,3 +20,54 @@ To start using the settings from this repo on your machine,
 # Prerequisites
 
 - This repo must be cloned to main drive (since hard links are not supported across drives)
+
+# Customizing workspaces
+
+## What to set
+
+- set both light and default theme (and ideally dark too), just in case
+- set "window.autoDetectColorScheme": true,
+
+Note: These can be set programmatically, and potentially even set up automatically using Ansible (if consistent across machines). I don't have this implemented yet though.
+
+## Example
+
+### Work 1: (Ubuntu)
+
+black sidebar:
+
+`
+    "workbench.preferredLightColorTheme": "Visual Studio Light",
+    "workbench.colorTheme": "Visual Studio Light",
+    "workbench.preferredDarkColorTheme": "Visual Studio Dark",
+`
+
+(set as Ubuntu default)
+
+### Work 2 (Ubuntu-22.04)
+
+White sidebar:
+
+`
+    "workbench.colorTheme": "Default Light Modern"
+`
+
+(Ubuntu-22.04 defaults to VSCode's default)
+
+### Windows (non-WSL)
+
+Yellow: solarized light?
+
+`
+  "workbench.preferredLightColorTheme": "Solarized Light"
+`
+
+(set as user default)
+
+### Repo Copies
+
+Purple frame:
+
+`
+"workbench.colorTheme": "Quiet Light"
+`
