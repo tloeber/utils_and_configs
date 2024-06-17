@@ -1,0 +1,1 @@
+- Allow machine-specific settings, e.g. AWS_DEFAULT_PROFILE, username, ... (Use variables)
