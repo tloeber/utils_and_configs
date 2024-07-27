@@ -1,1 +1,1 @@
-- Allow machine-specific settings, e.g. AWS_DEFAULT_PROFILE, username, ... (Use variables)
+- Allow machine-specific settings, e.g. AWS_DEFAULT_PROFILE, username, ... (Use variables or env file + autoenv?)

@@ -90,12 +90,11 @@
             "args": ["-l"]
         },
         // For projects where conda is used, make this the default shell in *workspace* settings.
-        // Note: Init file may need to be tweaked, haven't used it in a while
         "BashWithConda": {
             "path": "bash",
             "args": [
                 "--init-file",
-                "~/projects/utils_and_configs/python/initialize_conda_unix.sh"
+                "~/repos/utils_and_configs/python/initialize_conda_unix.sh",
             ]
         }
     },
@@ -111,7 +110,7 @@
             "path": "${env:HOMEPATH}\\AppData\\Local\\Programs\\Git\\bin\\bash.exe",
             "args": [
                 "--init-file",
-                "~/projects/utils_and_configs/python/initialize_conda_windows.sh"
+                "~/repos/utils_and_configs/python/initialize_conda_windows.sh"
             ]
         },
     },
@@ -125,6 +124,8 @@
     // --------------
     "terminal.integrated.enableMultiLinePasteWarning": false,
     "terminal.integrated.inheritEnv": true,  // New shells inherit env from VSCode. (No effect on Windows)
+    "terminal.integrated.scrollback": 5000,
+    "terminal.integrated.persistentSessionScrollback": 500,
 
 
     // Language-specific settings
@@ -240,9 +241,4 @@
     "remote.autoForwardPortsSource": "hybrid",
     "redhat.telemetry.enabled": false,
     "security.workspace.trust.untrustedFiles": "open",
-
-
-    // New / Uncategorized
-    // ====================
-
 }
