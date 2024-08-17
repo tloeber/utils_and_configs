@@ -1,17 +1,26 @@
+For my underlying shortcut strategy, see [here](https://github.com/tloeber/MLOps-best-practices/tree/main/best-practices/productivity)
+
 # VSCode Keybindings
+
 - Goals:
   - intuitive/easy to memorize
   - avoid collision with global shortcuts
   - cross-platform compatibility, if possible
 - See my general discussion of how these shortcuts fit into other important shortcuts, as well more on the goals and strategy [here]() (coming soon).
+
 ## Useful default shortcuts
+
 - Settings: Ctrl + , (default)
 - keyboard shortcuts: ctrl + K, ctrl + S (default)
+
 ## View
+
 - **Toggle current view width** (to better view nested folder structure):  incr/decr view (Ctrl + Super + up/down)
   - sidebar: focus on it first (Ctrl + shift + B),
 - Resize (left/right) panel: ctrl + shift + left/right  (Terminal, Problems, Debug Console, Jupyter VAriables, Git Lens, etc)
+
 ## Navigation
+
 - Open (folder/workspace/file) in new window ("reuse"; default): code **-r** ./
 - Open (folder/workspace/file) in existing window: code **-e** ./
 - Open file: Ctrl +  *shift* + O
@@ -23,7 +32,9 @@
 - Focus Explorer (**files**): control + shift + E
 - Focus **git**: control + shift + G
 - **Command Palette**: Control + P
+
 ## Editor
+
 - focus last editor: Ctrl + E
 - **navigate previous tabs: (hold ctrl) + tab**
 - ***previously active*/next (left/right) tab: alt left/right** (Try what difference is)
@@ -49,7 +60,9 @@
 - **Find filename: alt + shift+ F** (alt + F selects "Find" menu at the top left, Ctrl + F finds in current file, Ctrl + shift + F  finds in all files)
 - Go to a function's/class's *definition*: Ctrl + Shift + D
 - Find function's/class's *usages*: Ctrl + shift + U
+
 ## Debugger
+
 - Run with debugger: ctrl + D ~~or alt + D~~
 - Focus debug *console*: alt + D ~~or alt + 0 (Similar to "focus console").~~ Used to use ctrl + shift + D, but using that to go to function/class definition.
 - Continue: alt + C
@@ -58,7 +71,9 @@
 - Restart: alt + R
 - Stop:  Alt + Q (if Python) or Alt + S (may be confusing with *step* in/out) or Ctrl* + C?
 - Disconnect: alt + Q (if Jupyter/remote?)**
+
 ## Terminal
+
 - Focus: ctrl + 0
 - Hide: Ctrl + shift + 0 (On Windows, ctrl + 0 also unfocuses sidebar, but not on MacOS)
 - Split Terminal horizontally:  (Same as Jupyter split cell?)
@@ -66,8 +81,9 @@
 - Go left/right: (Same as next/prev. editor tab?)
 
 ## Jupyter
-### Same as notebook in browser
-- Split cell at cursor: ctrl + shift + "-"
 
+### Same as notebook in browser
+
+- Split cell at cursor: ctrl + shift + "-"
 
 ## Custom
