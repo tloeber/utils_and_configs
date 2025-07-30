@@ -50,6 +50,9 @@ source ~/.autoenv/activate.sh
 # Set environment variables
 # =========================
 
+# tfenv
+TFENV_ARCH=amd_64
+
 # Dev setup
 # ---------
 export ENVIRONMENT="local"

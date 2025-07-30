@@ -1,3 +1,9 @@
+## Python
+## ======
+alias rf="ruff format"
+alias rl="ruff check"  # "l" is for lint
+
+
 ## Docker
 ## =======
 
@@ -75,6 +81,8 @@ alias gmv="git move"
 ## =====
 
 alias h="history | tail"
+alias awsl="aws sso login"
+
 
 # Create directory and change into it
 function mc {
@@ -96,7 +104,7 @@ alias tfws="terraform workspace select"
 alias tfwn="terraform workspace new"
 alias tfwl="terraform workspace list"
 
-alias tfi="terraform import"
+alias tfi="terraform init"
 
 
 # Databricks

@@ -10,6 +10,10 @@ useradd $USERNAME
 passwd $USERNAME
 usermod -aG sudo $USERNAME
 
+# Create home directory for the new user.
+mkdir /home/${USERNAME}
+sudo chown -R $USERNAME /HOME/{$USERNAME}
+
 # Set this user as default.
 # Note: Restart WSL for this to take effect.
 echo -e "[user]\ndefault=$USERNAME" >> /etc/wsl.conf
