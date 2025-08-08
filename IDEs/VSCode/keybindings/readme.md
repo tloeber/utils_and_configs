@@ -8,6 +8,14 @@ For my underlying shortcut strategy, see [here](https://github.com/tloeber/MLOps
   - cross-platform compatibility, if possible
 - See my general discussion of how these shortcuts fit into other important shortcuts, as well more on the goals and strategy [here]() (coming soon).
 
+## Note on Mac usage
+
+If you remapped the modifier keys for a Windows/Linux-like keyboard feel, search and replace the following terms (in the following order):
+
+- ctrl -> cmd
+- alt -> ctrl
+- win -> alt
+
 ## Useful default shortcuts
 
 - Settings: Ctrl + , (default)
