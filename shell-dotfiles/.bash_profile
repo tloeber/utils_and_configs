@@ -31,6 +31,13 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
+# Windows-specific
+# ----------------
+# make
+if [ -d "/c/Program Files (x86)/GnuWin32/bin" ]; then
+    PATH="$PATH:/c/Program Files (x86)/GnuWin32/bin"
+fi
+
 
 # Configuration
 # =============
