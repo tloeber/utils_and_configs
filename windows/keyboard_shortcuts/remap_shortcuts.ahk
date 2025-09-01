@@ -49,9 +49,22 @@ $^Tab::
         }
     }
 }
-#Left::Send("^{Left}")              ; Win+Left becomes Ctrl+Left (jump one word left)
+$#Left::Send("^{Left}")             ; Win+Left becomes Ctrl+Left (jump one word left)
 #Right::Send("^{Right}")            ; Win+Right becomes Ctrl+Right (jump one word right)
-^Left::Send("{Home}")               ; Ctrl+Left becomes Home (go to beginning of line)
+$^Left::
+{
+    try {
+        processName := WinGetProcessName("A")
+        ; ToolTip("Process: " . processName, 0, 0)  ; Debug line - uncomment to see process name
+        if (InStr(processName, "chrome") || InStr(processName, "firefox") || InStr(processName, "msedge") || InStr(processName, "brave") || InStr(processName, "opera") || InStr(processName, "iexplore")) {
+            Send("!{Left}")
+        } else {
+            Send("{Home}")
+        }
+    } catch {
+        Send("{Home}")  ; Fallback to Home if there's an error
+    }
+}
 ^Right::Send("{End}")               ; Ctrl+Right becomes End (go to end of line)
 ^Up::Send("^{Home}")                ; Ctrl+Up becomes Ctrl+Home (go to beginning of document)
 ^Down::Send("^{End}")               ; Ctrl+Down becomes Ctrl+End (go to end of document)
