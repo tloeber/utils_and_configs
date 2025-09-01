@@ -65,7 +65,19 @@ $^Left::
         Send("{Home}")  ; Fallback to Home if there's an error
     }
 }
-^Right::Send("{End}")               ; Ctrl+Right becomes End (go to end of line)
+$^Right::
+{
+    try {
+        processName := WinGetProcessName("A")
+        if (InStr(processName, "chrome") || InStr(processName, "firefox") || InStr(processName, "msedge") || InStr(processName, "brave") || InStr(processName, "opera") || InStr(processName, "iexplore")) {
+            Send("!{Right}")
+        } else {
+            Send("{End}")
+        }
+    } catch {
+        Send("{End}")  ; Fallback to End if there's an error
+    }
+}
 ^Up::Send("^{Home}")                ; Ctrl+Up becomes Ctrl+Home (go to beginning of document)
 ^Down::Send("^{End}")               ; Ctrl+Down becomes Ctrl+End (go to end of document)
 #+Left::Send("^+{Left}")            ; Win+Shift+Left becomes Ctrl+Shift+Left (select word left)
