@@ -58,6 +58,16 @@ $^Tab::
 #+Left::Send("^+{Left}")            ; Win+Shift+Left becomes Ctrl+Shift+Left (select word left)
 #+Right::Send("^+{Right}")          ; Win+Shift+Right becomes Ctrl+Shift+Right (select word right)
 #!m::Send("+#{Right}")              ; Win+Alt+M becomes Shift+Win+Right (move window to next monitor right)
+
+; Alt+Left-Click acts as Right-Click
+$!LButton::
+{
+    Send("{RButton down}")
+}
+$!LButton Up::
+{
+    Send("{RButton up}")
+}
 #!n::Send("+#{Left}")               ; Win+Alt+N becomes Shift+Win+Left (move window to next monitor left)
 #!Enter::WinMaximize("A")           ; Win+Alt+Enter maximizes active window
 #Backspace::Send("^{Backspace}")    ; Win+Backspace becomes Ctrl+Backspace (delete last word)
